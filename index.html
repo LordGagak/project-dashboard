@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Visual Generation — Project Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #15151a;
+    --surface2: #1c1c23;
+    --border: #2a2a35;
+    --text: #f0eff5;
+    --muted: #7b7a8e;
+    --accent: #c8f542;
+    --plan-bg: #1a1a28;
+    --plan-pill: #3d3d6b;
+    --plan-text: #a0a0f0;
+    --prog-bg: #1a1408;
+    --prog-pill: #5c4a00;
+    --prog-text: #f5c842;
+    --done-bg: #0d1a10;
+    --done-pill: #1a5c2a;
+    --done-text: #42f57a;
+    --type-photo: #ff6b9d;
+    --type-video: #42d4f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 28px 60px;
+  }
+
+  /* HEADER */
+  header {
+    padding: 40px 0 36px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .header-left {}
+
+  .project-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  h1 span {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .last-updated {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .refresh-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .refresh-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .refresh-btn svg {
+    transition: transform 0.4s;
+  }
+
+  .refresh-btn:hover svg {
+    transform: rotate(180deg);
+  }
+
+  /* SUMMARY PILLS */
+  .summary-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .summary-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 500;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .summary-pill .count {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .summary-pill.total .count { color: var(--text); }
+  .summary-pill.plan .count { color: var(--plan-text); }
+  .summary-pill.progress .count { color: var(--prog-text); }
+  .summary-pill.done .count { color: var(--done-text); }
+
+  /* KANBAN */
+  .kanban {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .kanban { grid-template-columns: 1fr; }
+  }
+
+  .column {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .column:nth-child(2) { animation-delay: 0.08s; }
+  .column:nth-child(3) { animation-delay: 0.16s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .col-header {
+    padding: 18px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .col-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .col-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .col-plan .col-icon { background: var(--plan-text); }
+  .col-progress .col-icon { background: var(--prog-text); box-shadow: 0 0 8px var(--prog-text); animation: pulse 1.5s infinite; }
+  .col-done .col-icon { background: var(--done-text); }
+
+  .col-count {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .col-plan .col-count { background: var(--plan-bg); color: var(--plan-text); }
+  .col-progress .col-count { background: var(--prog-bg); color: var(--prog-text); }
+  .col-done .col-count { background: var(--done-bg); color: var(--done-text); }
+
+  .col-body {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 120px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .card:hover {
+    border-color: var(--muted);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .type-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .type-photo { background: rgba(255,107,157,0.12); color: var(--type-photo); border: 1px solid rgba(255,107,157,0.25); }
+  .type-video { background: rgba(66,212,245,0.1); color: var(--type-video); border: 1px solid rgba(66,212,245,0.2); }
+
+  .card-date {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .card-notes {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 5px 10px;
+    background: rgba(200,245,66,0.07);
+    border: 1px solid rgba(200,245,66,0.2);
+    border-radius: 7px;
+    transition: background 0.2s;
+  }
+
+  .card-link:hover {
+    background: rgba(200,245,66,0.14);
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    line-height: 1.6;
+  }
+
+  /* ERROR / LOADING */
+  .status-message {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .status-message .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* SETUP PANEL */
+  .setup-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .setup-panel h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  .setup-panel p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .setup-panel code {
+    display: block;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--plan-text);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  .url-input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .url-input {
+    flex: 1;
+    min-width: 260px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .url-input:focus {
+    border-color: var(--accent);
+  }
+
+  .url-input::placeholder { color: var(--muted); }
+
+  .url-save-btn {
+    background: var(--accent);
+    color: #0d0d0f;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .url-save-btn:hover { opacity: 0.85; }
+
+  .setup-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .setup-toggle:hover { border-color: var(--muted); color: var(--text); }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="header-left">
+      <div class="project-label">AI Visual Generation</div>
+      <h1>Project <span>Dashboard</span></h1>
+    </div>
+    <div class="header-meta">
+      <div class="last-updated">
+        <div class="live-dot"></div>
+        <span id="lastUpdated">Loading...</span>
+      </div>
+      <button class="refresh-btn" onclick="loadData()">
+        <svg id="refreshIcon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.5 6.5A5 5 0 1 1 6.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 1.5L11.5 1.5L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Refresh
+      </button>
+      <button class="setup-toggle" onclick="toggleSetup()">Setup Sheet</button>
+    </div>
+  </header>
+
+  <!-- SETUP PANEL -->
+  <div class="setup-panel" id="setupPanel" style="display:none">
+    <h2>Connect Google Sheet</h2>
+    <p>
+      Buat Google Sheet dengan kolom berikut (urutan harus sama), lalu publish sebagai CSV dan paste URL-nya di bawah.
+    </p>
+    <code>
+      Kolom A: Request Name<br>
+      Kolom B: Type (Photo / Video)<br>
+      Kolom C: Status (Plan / On Progress / Delivered)<br>
+      Kolom D: Date (format: DD MMM YYYY, contoh: 15 Jan 2025)<br>
+      Kolom E: Notes<br>
+      Kolom F: File Link (URL Google Drive)
+    </code>
+    <p>
+      Cara publish: <strong>File > Share > Publish to web</strong>, pilih sheet dan format <strong>CSV</strong>, klik Publish. Copy URL-nya dan paste di bawah.
+    </p>
+    <div class="url-input-row">
+      <input class="url-input" id="sheetUrl" type="text" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" />
+      <button class="url-save-btn" onclick="saveUrl()">Save & Load</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar" id="summaryBar" style="display:none">
+    <div class="summary-pill total">
+      <span class="count" id="totalCount">0</span>
+      <span>Total Requests</span>
+    </div>
+    <div class="summary-pill plan">
+      <span class="count" id="planCount">0</span>
+      <span>Plan</span>
+    </div>
+    <div class="summary-pill progress">
+      <span class="count" id="progressCount">0</span>
+      <span>On Progress</span>
+    </div>
+    <div class="summary-pill done">
+      <span class="count" id="doneCount">0</span>
+      <span>Delivered</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+    <div class="status-message">
+      <div style="font-size:14px; color: var(--muted); line-height:1.8;">
+        Belum ada sheet yang terhubung.<br>Klik <strong style="color:var(--text)">Setup Sheet</strong> di kanan atas untuk mulai.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>AI Visual Generation Dashboard</span>
+    <span id="footerCount"></span>
+  </footer>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'dashboard_sheet_url';
+
+  function toggleSetup() {
+    const panel = document.getElementById('setupPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    if (panel.style.display === 'block') {
+      const saved = localStorage.getItem(STORAGE_KEY) || '';
+      document.getElementById('sheetUrl').value = saved;
+    }
+  }
+
+  function saveUrl() {
+    const url = document.getElementById('sheetUrl').value.trim();
+    if (!url) return;
+    localStorage.setItem(STORAGE_KEY, url);
+    document.getElementById('setupPanel').style.display = 'none';
+    loadData();
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const result = [];
+    // skip header row if first cell looks like a header
+    const startRow = (lines[0] && lines[0].toLowerCase().includes('request')) ? 1 : 0;
+    for (let i = startRow; i < lines.length; i++) {
+      const cols = parseCSVLine(lines[i]);
+      if (!cols[0] || !cols[0].trim()) continue;
+      result.push({
+        name: cols[0]?.trim() || '',
+        type: cols[1]?.trim() || '',
+        status: cols[2]?.trim() || 'Plan',
+        date: cols[3]?.trim() || '',
+        notes: cols[4]?.trim() || '',
+        link: cols[5]?.trim() || ''
+      });
+    }
+    return result;
+  }
+
+  function parseCSVLine(line) {
+    const result = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        result.push(cur);
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  function normalizeStatus(raw) {
+    const s = (raw || '').toLowerCase().trim();
+    if (s === 'plan' || s === 'planned') return 'Plan';
+    if (s.includes('progress') || s === 'ongoing' || s === 'wip') return 'On Progress';
+    if (s === 'delivered' || s === 'done' || s === 'complete' || s === 'completed') return 'Delivered';
+    return 'Plan';
+  }
+
+  function renderCard(item) {
+    const typeClass = (item.type.toLowerCase() === 'video') ? 'type-video' : 'type-photo';
+    const typeLabel = item.type || 'Photo';
+    const hasLink = item.link && item.link.startsWith('http');
+
+    return `
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">${escapeHtml(item.name)}</div>
+          <span class="type-badge ${typeClass}">${escapeHtml(typeLabel)}</span>
+        </div>
+        ${item.date ? `<div class="card-date">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M8 1v2M1 5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          ${escapeHtml(item.date)}
+        </div>` : ''}
+        ${item.notes ? `<div class="card-notes">${escapeHtml(item.notes)}</div>` : ''}
+        ${hasLink ? `<a href="${item.link}" target="_blank" rel="noopener" class="card-link">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M5 2H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7M7 1h4m0 0v4m0-4L5.5 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          View File
+        </a>` : ''}
+      </div>
+    `;
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderBoard(items) {
+    const columns = {
+      'Plan': [],
+      'On Progress': [],
+      'Delivered': []
+    };
+
+    items.forEach(item => {
+      const status = normalizeStatus(item.status);
+      columns[status].push(item);
+    });
+
+    const planCards = columns['Plan'].map(renderCard).join('') || `<div class="empty-state">No requests planned yet.</div>`;
+    const progCards = columns['On Progress'].map(renderCard).join('') || `<div class="empty-state">Nothing in progress yet.</div>`;
+    const doneCards = columns['Delivered'].map(renderCard).join('') || `<div class="empty-state">No deliveries yet.</div>`;
+
+    document.getElementById('mainContent').innerHTML = `
+      <div class="kanban">
+        <div class="column col-plan">
+          <div class="col-header">
+            <div class="col-title">
+              <div class="col-icon"></div>
+              Plan
+            </div>
+            <span class="col-count">${columns['Plan'].length}</span>
+          </div>
+          <div class="col-body">${planCards}</div>
+        </div>
+        <div class="column col-progress">
+          <div class="col-header">
+            <div class="col-title">
+              <div class="col-icon"></div>
+              On Progress
+            </div>
+            <span class="col-count">${columns['On Progress'].length}</span>
+          </div>
+          <div class="col-body">${progCards}</div>
+        </div>
+        <div class="column col-done">
+          <div class="col-header">
+            <div class="col-title">
+              <div class="col-icon"></div>
+              Delivered
+            </div>
+            <span class="col-count">${columns['Delivered'].length}</span>
+          </div>
+          <div class="col-body">${doneCards}</div>
+        </div>
+      </div>
+    `;
+
+    // update summary
+    const total = items.length;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('planCount').textContent = columns['Plan'].length;
+    document.getElementById('progressCount').textContent = columns['On Progress'].length;
+    document.getElementById('doneCount').textContent = columns['Delivered'].length;
+    document.getElementById('summaryBar').style.display = 'flex';
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('lastUpdated').textContent = `Last updated ${timeStr}`;
+    document.getElementById('footerCount').textContent = `${total} total requests`;
+  }
+
+  async function loadData() {
+    const url = localStorage.getItem(STORAGE_KEY);
+    if (!url) return;
+
+    document.getElementById('mainContent').innerHTML = `
+      <div class="status-message">
+        <div class="spinner"></div>
+        <div>Loading data from Google Sheet...</div>
+      </div>
+    `;
+    document.getElementById('summaryBar').style.display = 'none';
+    document.getElementById('lastUpdated').textContent = 'Fetching...';
+
+    try {
+      // Add cache buster
+      const fetchUrl = url.includes('?') ? url + '&t=' + Date.now() : url + '?t=' + Date.now();
+      const res = await fetch(fetchUrl);
+      if (!res.ok) throw new Error('Network response was not ok');
+      const text = await res.text();
+      const items = parseCSV(text);
+
+      if (items.length === 0) {
+        document.getElementById('mainContent').innerHTML = `
+          <div class="status-message">
+            <div style="font-size:14px;line-height:1.8;color:var(--muted)">
+              Sheet terhubung tapi tidak ada data.<br>
+              Pastikan format kolom sudah sesuai dan ada minimal satu baris data.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      renderBoard(items);
+
+    } catch (err) {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="status-message">
+          <div style="font-size:14px;line-height:1.8;color:var(--muted)">
+            Gagal mengambil data. Pastikan URL CSV sudah benar dan sheet sudah dipublish.<br>
+            <span style="font-size:12px;color:#e06060">${err.message}</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('lastUpdated').textContent = 'Failed to load';
+    }
+  }
+
+  // Auto-refresh setiap 60 detik
+  setInterval(loadData, 60000);
+
+  // Init
+  const savedUrl = localStorage.getItem(STORAGE_KEY);
+  if (savedUrl) {
+    loadData();
+  } else {
+    document.getElementById('lastUpdated').textContent = 'Not connected';
+  }
+</script>
+</body>
+</html>
