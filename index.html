@@ -47,13 +47,14 @@
 
   /* ── LOGIN SCREEN ───────────────────────────────────────────── */
   #loginScreen {
-    position: fixed;
-    inset: 0;
+    position: relative;
     z-index: 100;
+    min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     background: var(--bg);
+    padding: 48px 20px 60px;
   }
 
   .login-box {
@@ -65,7 +66,7 @@
     border-radius: 20px;
     animation: fadeUp 0.5s ease both;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .login-box::before {
@@ -872,10 +873,19 @@
     const config = getConfig();
     let base = config.baseUrl;
     if (!base) return null;
-    // Remove any existing gid param
-    base = base.replace(/[&?]gid=\d*/g, '').replace(/[&?]single=(true|false)/g, '');
+
+    // Strip all existing relevant params so we can rebuild cleanly
+    base = base
+      .replace(/[&?]output=[^&]*/g, '')
+      .replace(/[&?]gid=[^&]*/g, '')
+      .replace(/[&?]single=[^&]*/g, '')
+      .replace(/[&?]t=[^&]*/g, '')
+      .replace(/\?$/, '');
+
     const sep = base.includes('?') ? '&' : '?';
-    return `${base}${sep}gid=${currentGid}&single=true&output=csv&t=${Date.now()}`;
+    // Only append gid if it's set and non-empty
+    const gidPart = currentGid !== '' ? `&gid=${currentGid}&single=true` : '';
+    return `${base}${sep}output=csv${gidPart}&t=${Date.now()}`;
   }
 
   async function loadData() {
