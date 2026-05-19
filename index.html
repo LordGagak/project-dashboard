@@ -1,1059 +1,807 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Visual Generation — Client Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<title>Project Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d0d0f;
-    --surface: #15151a;
-    --surface2: #1c1c23;
-    --border: #2a2a35;
-    --text: #f0eff5;
-    --muted: #7b7a8e;
-    --accent: #c8f542;
-    --plan-bg: #1a1a28;
-    --plan-text: #a0a0f0;
-    --prog-bg: #1a1408;
-    --prog-text: #f5c842;
-    --done-bg: #0d1a10;
-    --done-text: #42f57a;
-    --type-photo: #ff6b9d;
-    --type-video: #42d4f5;
-    --error: #ff5e5e;
+    --yellow:  #FFD93D;
+    --orange:  #FF6B35;
+    --green:   #4ECB71;
+    --blue:    #4D96FF;
+    --pink:    #FF6FB8;
+    --teal:    #00C9B1;
+    --bg:      #FFFBF4;
+    --surface: #FFFFFF;
+    --border:  #EDE6D8;
+    --text:    #1C1408;
+    --muted:   #8A7560;
+    --radius:  14px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
+  /* ─── BLOBS ─── */
+  .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .blob  { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .16; }
+  .blob-1 { width: 540px; height: 540px; background: var(--yellow); top: -140px; left: -140px; }
+  .blob-2 { width: 420px; height: 420px; background: var(--orange); top: 45%;   right: -100px; }
+  .blob-3 { width: 380px; height: 380px; background: var(--teal);   bottom: -80px; left: 28%; }
 
-  /* ── LOGIN SCREEN ───────────────────────────────────────────── */
+  /* ─── SCREENS ─── */
+  .screen { position: relative; z-index: 1; }
+  .hidden { display: none !important; }
+
+  /* ─── LOGIN ─── */
   #loginScreen {
-    position: relative;
-    z-index: 100;
     min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background: var(--bg);
-    padding: 48px 20px 60px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
   }
-
-  .login-box {
-    width: 100%;
-    max-width: 420px;
-    padding: 48px 40px;
+  .login-card {
+    width: 100%; max-width: 420px;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    animation: fadeUp 0.5s ease both;
-    position: relative;
-    overflow: visible;
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    padding: 48px 40px 40px;
+    box-shadow: 0 8px 48px rgba(28,20,8,.09);
+    animation: fadeUp .45s ease both;
   }
-
-  .login-box::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 180px;
-    height: 180px;
-    background: radial-gradient(circle, rgba(200,245,66,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+  @media (max-width: 480px) { .login-card { padding: 36px 24px 28px; } }
 
   .login-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
+    width: 52px; height: 52px;
+    background: var(--yellow);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px; font-size: 24px;
   }
+  .login-title { font-size: 24px; font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
+  .login-sub   { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
 
-  .login-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.2;
-    margin-bottom: 8px;
+  .field-label { font-size: 13px; font-weight: 600; letter-spacing: .02em; margin-bottom: 8px; display: block; }
+  .field-input {
+    width: 100%; padding: 12px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    background: var(--bg); color: var(--text);
+    outline: none; transition: border-color .2s; margin-bottom: 20px;
   }
+  .field-input:focus { border-color: var(--orange); background: #fff; }
 
-  .login-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 36px;
-    line-height: 1.6;
+  .btn-primary {
+    width: 100%; padding: 14px;
+    background: var(--orange); color: #fff;
+    border: none; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background .2s, transform .1s;
   }
+  .btn-primary:hover  { background: #e85c28; }
+  .btn-primary:active { transform: scale(.98); }
 
-  .input-label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+  .login-error {
+    margin-top: 14px; padding: 10px 14px;
+    background: #fff0ec; border: 1px solid #ffc4b3;
+    border-radius: 8px; font-size: 13px; color: #c0391b; display: none;
   }
+  .login-error.show { display: block; }
 
-  .input-wrap {
-    position: relative;
-    margin-bottom: 12px;
+  .admin-link { margin-top: 24px; text-align: center; font-size: 12px; color: var(--muted); }
+  .admin-link a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+  .admin-link a:hover { color: var(--text); }
+
+  /* ─── ADMIN PANEL ─── */
+  #adminPanel { min-height: 100vh; padding: 40px 20px 60px; display: flex; flex-direction: column; align-items: center; }
+  .admin-card {
+    width: 100%; max-width: 680px;
+    background: var(--surface);
+    border: 1.5px solid var(--border); border-radius: 24px;
+    padding: 40px; box-shadow: 0 8px 48px rgba(28,20,8,.08);
+    animation: fadeUp .4s ease both;
   }
+  @media (max-width: 480px) { .admin-card { padding: 24px 18px; } }
 
-  .login-input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 13px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s;
-    letter-spacing: 0.12em;
+  .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+  .admin-title  { font-size: 20px; font-weight: 700; }
+
+  .btn-back {
+    padding: 8px 16px; background: var(--bg);
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; color: var(--text); transition: background .2s;
   }
-
-  .login-input:focus {
-    border-color: var(--accent);
-  }
-
-  .login-input.error {
-    border-color: var(--error);
-    animation: shake 0.35s ease;
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-6px); }
-    40% { transform: translateX(6px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
-  }
-
-  .error-msg {
-    font-size: 12px;
-    color: var(--error);
-    margin-bottom: 16px;
-    min-height: 18px;
-    transition: opacity 0.2s;
-  }
-
-  .login-btn {
-    width: 100%;
-    background: var(--accent);
-    color: #0d0d0f;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-
-  .login-btn:hover { opacity: 0.88; }
-  .login-btn:active { transform: scale(0.98); }
-
-  /* ── ADMIN SETUP BUTTON ─────────────────────────────────────── */
-  .admin-toggle-wrap {
-    text-align: center;
-    margin-top: 24px;
-  }
-
-  .admin-toggle {
-    background: none;
-    border: none;
-    font-size: 11px;
-    color: var(--muted);
-    cursor: pointer;
-    text-decoration: underline;
-    font-family: 'DM Sans', sans-serif;
-    transition: color 0.2s;
-  }
-
-  .admin-toggle:hover { color: var(--text); }
-
-  /* ── ADMIN PANEL (on login screen) ─────────────────────────── */
-  #adminSetup {
-    display: none;
-    margin-top: 28px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-  }
+  .btn-back:hover { background: var(--border); }
 
   .admin-section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
+    font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 12px; margin-top: 28px;
   }
+  .admin-section-title:first-of-type { margin-top: 0; }
 
-  .client-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-    align-items: center;
-  }
-
-  .client-row-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .client-row-header span {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding-left: 4px;
-  }
-
+  .admin-row { margin-bottom: 16px; }
   .admin-input {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    color: var(--text);
-    outline: none;
-    width: 100%;
-    transition: border-color 0.2s;
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: 9px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    background: var(--bg); color: var(--text);
+    outline: none; transition: border-color .2s;
   }
+  .admin-input:focus { border-color: var(--orange); background: #fff; }
+  .admin-hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
 
-  .admin-input:focus { border-color: var(--accent); }
-  .admin-input::placeholder { color: var(--muted); }
-
-  .base-url-row {
-    margin-bottom: 16px;
+  .client-block {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 18px; margin-bottom: 10px;
   }
-
-  .base-url-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-    display: block;
-  }
-
-  .admin-hint {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.6;
+  .client-block-head {
+    display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 14px;
-    font-style: italic;
   }
+  .client-block-label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .client-remove { font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'DM Sans',sans-serif; }
+  .client-remove:hover { color: var(--orange); }
+  .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 480px) { .client-grid { grid-template-columns: 1fr; } }
+  .field-mini-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
 
-  .admin-save-btn {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--accent);
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 12px;
-    transition: background 0.2s;
+  .btn-add-client {
+    width: 100%; padding: 11px; background: transparent;
+    border: 1.5px dashed var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted);
+    cursor: pointer; margin-bottom: 12px; transition: border-color .2s, color .2s;
   }
+  .btn-add-client:hover { border-color: var(--orange); color: var(--orange); }
 
-  .admin-save-btn:hover { background: var(--border); }
-
-  /* ── DASHBOARD WRAPPER ──────────────────────────────────────── */
-  #dashboardScreen {
-    display: none;
-    position: relative;
-    z-index: 1;
+  .btn-save {
+    margin-top: 28px; width: 100%; padding: 14px;
+    background: var(--green); color: #fff; border: none; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background .2s;
   }
+  .btn-save:hover { background: #39b55e; }
 
-  .wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 28px 60px;
+  .save-msg {
+    margin-top: 14px; padding: 10px 14px;
+    background: #edfbf1; border: 1px solid #b3e8c2;
+    border-radius: 8px; font-size: 13px; color: #1e7a3c;
+    display: none; text-align: center;
   }
+  .save-msg.show { display: block; }
 
-  header {
-    padding: 40px 0 36px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 32px;
-    gap: 20px;
-    flex-wrap: wrap;
+  /* ─── DASHBOARD ─── */
+  #dashboard { min-height: 100vh; padding: 0 0 60px; }
+
+  .dash-header {
+    background: rgba(255,255,255,.85); backdrop-filter: blur(12px);
+    border-bottom: 1.5px solid var(--border);
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    position: sticky; top: 0; z-index: 50;
   }
+  @media (max-width: 600px) { .dash-header { padding: 14px 18px; flex-wrap: wrap; } }
 
-  .project-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
+  .dash-logo { display: flex; align-items: center; gap: 12px; }
+  .dash-logo-icon { width: 38px; height: 38px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .dash-logo-name { font-size: 16px; font-weight: 700; }
+
+  .dash-meta { display: flex; align-items: center; gap: 12px; }
+  .dash-client-label { font-size: 14px; font-weight: 500; color: var(--muted); }
+
+  .btn-logout {
+    padding: 7px 14px; background: var(--bg);
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; color: var(--text); transition: background .2s;
   }
+  .btn-logout:hover { background: var(--border); }
 
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(26px, 4vw, 42px);
-    font-weight: 800;
-    line-height: 1.1;
+  .dash-body { padding: 32px; }
+  @media (max-width: 600px) { .dash-body { padding: 20px; } }
+
+  .dash-greeting { margin-bottom: 24px; }
+  .dash-greeting h1 { font-size: 26px; font-weight: 700; }
+  .dash-greeting p  { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+  /* summary chips */
+  .summary-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+  .summary-chip {
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 14px; border-radius: 100px;
+    font-size: 13px; font-weight: 600; border: 1.5px solid transparent;
   }
+  .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chip-25  { background: #fff8e0; border-color: #ffe780; color: #7a5c00; }
+  .chip-25  .chip-dot { background: var(--yellow); }
+  .chip-50  { background: #fff2ec; border-color: #ffc9b3; color: #8a3010; }
+  .chip-50  .chip-dot { background: var(--orange); }
+  .chip-75  { background: #ecf5ff; border-color: #b3d6ff; color: #1a4080; }
+  .chip-75  .chip-dot { background: var(--blue); }
+  .chip-100 { background: #edfbf1; border-color: #b3e8c2; color: #1e6e38; }
+  .chip-100 .chip-dot { background: var(--green); }
 
-  h1 span { color: var(--muted); font-weight: 400; }
-
-  .header-meta {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .last-updated {
-    font-size: 12px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .live-dot {
-    width: 7px; height: 7px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
-  }
-
-  .icon-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .icon-btn:hover { border-color: var(--muted); color: var(--text); }
-
-  .logout-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .logout-btn:hover { border-color: var(--error); color: var(--error); }
-
-  /* ── SUMMARY ────────────────────────────────────────────────── */
-  .summary-bar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .summary-pill {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 18px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  .summary-pill .count {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .summary-pill.total .count { color: var(--text); }
-  .summary-pill.plan .count { color: var(--plan-text); }
-  .summary-pill.progress .count { color: var(--prog-text); }
-  .summary-pill.done .count { color: var(--done-text); }
-
-  /* ── KANBAN ─────────────────────────────────────────────────── */
-  .kanban {
+  /* project cards */
+  .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    align-items: start;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 18px;
   }
+  @media (max-width: 360px) { .projects-grid { grid-template-columns: 1fr; } }
 
-  @media (max-width: 900px) { .kanban { grid-template-columns: 1fr; } }
-
-  .column {
+  .project-card {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    animation: fadeUp 0.5s ease both;
+    border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(28,20,8,.05);
+    animation: fadeUp .45s ease both;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .project-card:hover { box-shadow: 0 6px 28px rgba(28,20,8,.1); transform: translateY(-2px); }
+  .project-card:nth-child(1) { animation-delay: .04s; }
+  .project-card:nth-child(2) { animation-delay: .08s; }
+  .project-card:nth-child(3) { animation-delay: .12s; }
+  .project-card:nth-child(4) { animation-delay: .16s; }
+  .project-card:nth-child(5) { animation-delay: .20s; }
+  .project-card:nth-child(6) { animation-delay: .24s; }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 10px; }
+  .card-name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+
+  .status-badge {
+    flex-shrink: 0; padding: 4px 10px; border-radius: 100px;
+    font-size: 12px; font-weight: 700; white-space: nowrap;
+  }
+  .badge-25  { background: #fff8e0; color: #7a5c00; }
+  .badge-50  { background: #fff2ec; color: #8a3010; }
+  .badge-75  { background: #ecf5ff; color: #1a4080; }
+  .badge-100 { background: #edfbf1; color: #1e6e38; }
+  .badge-other { background: var(--bg); color: var(--muted); }
+
+  .progress-wrap { height: 6px; background: var(--border); border-radius: 100px; margin-bottom: 16px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 100px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+  .fill-25   { background: var(--yellow); }
+  .fill-50   { background: var(--orange); }
+  .fill-75   { background: var(--blue); }
+  .fill-100  { background: var(--green); }
+  .fill-other { background: var(--muted); }
+
+  .card-dates { display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
+  .date-item  { display: flex; flex-direction: column; gap: 2px; }
+  .date-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .date-val   { font-size: 13px; font-weight: 500; }
+
+  .card-pic { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .pic-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--yellow); display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #7a5c00;
+  }
+  .pic-name { font-size: 13px; font-weight: 500; }
+
+  /* items */
+  .items-section { border-top: 1.5px solid var(--border); padding-top: 14px; }
+  .items-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--muted); margin-bottom: 10px;
   }
 
-  .column:nth-child(2) { animation-delay: 0.08s; }
-  .column:nth-child(3) { animation-delay: 0.16s; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  .item-row { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 7px; overflow: hidden; }
+  .item-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; cursor: pointer; user-select: none; transition: background .15s;
   }
+  .item-header:hover { background: var(--border); }
 
-  .col-header {
-    padding: 18px 20px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
+  .item-left { display: flex; align-items: center; gap: 9px; }
+  .item-icon {
+    width: 26px; height: 26px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
   }
+  .icon-neon  { background: #fff8e0; }
+  .icon-huruf { background: #ffeef5; }
+  .icon-other { background: #ecf5ff; }
 
-  .col-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .item-name { font-size: 14px; font-weight: 600; }
+  .item-chevron { font-size: 11px; color: var(--muted); transition: transform .25s; }
+  .item-row.open .item-chevron { transform: rotate(180deg); }
+
+  .item-detail {
+    padding: 0 14px; max-height: 0; overflow: hidden;
+    transition: max-height .35s ease, padding .3s ease;
   }
+  .item-row.open .item-detail { max-height: 500px; padding: 0 14px 14px; }
 
-  .col-icon { width: 8px; height: 8px; border-radius: 50%; }
-  .col-plan .col-icon { background: var(--plan-text); }
-  .col-progress .col-icon { background: var(--prog-text); box-shadow: 0 0 8px var(--prog-text); animation: pulse 1.5s infinite; }
-  .col-done .col-icon { background: var(--done-text); }
-
-  .col-count {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 100px;
+  .spec-row {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border);
   }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { font-weight: 600; color: var(--muted); min-width: 110px; flex-shrink: 0; }
+  .spec-val { color: var(--text); line-height: 1.5; }
 
-  .col-plan .col-count { background: var(--plan-bg); color: var(--plan-text); }
-  .col-progress .col-count { background: var(--prog-bg); color: var(--prog-text); }
-  .col-done .col-count { background: var(--done-bg); color: var(--done-text); }
-
-  .col-body {
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-height: 120px;
+  /* state boxes */
+  .state-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 64px 20px; text-align: center; gap: 12px;
   }
-
-  /* ── CARDS ──────────────────────────────────────────────────── */
-  .card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    transition: border-color 0.2s, transform 0.2s;
-    animation: fadeUp 0.4s ease both;
-  }
-
-  .card:hover { border-color: var(--muted); transform: translateY(-2px); }
-
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .card-name {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-    color: var(--text);
-    flex: 1;
-  }
-
-  .type-badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 100px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .type-photo { background: rgba(255,107,157,0.12); color: var(--type-photo); border: 1px solid rgba(255,107,157,0.25); }
-  .type-video { background: rgba(66,212,245,0.1); color: var(--type-video); border: 1px solid rgba(66,212,245,0.2); }
-
-  .card-date {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .card-notes {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-    margin-bottom: 10px;
-    font-style: italic;
-  }
-
-  .card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent);
-    text-decoration: none;
-    padding: 5px 10px;
-    background: rgba(200,245,66,0.07);
-    border: 1px solid rgba(200,245,66,0.2);
-    border-radius: 7px;
-    transition: background 0.2s;
-  }
-
-  .card-link:hover { background: rgba(200,245,66,0.14); }
-
-  .empty-state {
-    padding: 28px 16px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    border: 1.5px dashed var(--border);
-    border-radius: 10px;
-    line-height: 1.6;
-  }
-
-  .status-message {
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--muted);
-  }
+  .state-icon  { font-size: 40px; }
+  .state-title { font-size: 18px; font-weight: 700; }
+  .state-sub   { font-size: 14px; color: var(--muted); max-width: 320px; line-height: 1.6; }
 
   .spinner {
-    width: 28px; height: 28px;
-    border: 2.5px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
+    width: 36px; height: 36px; border: 3px solid var(--border);
+    border-top-color: var(--orange); border-radius: 50%;
+    animation: spin .7s linear infinite;
   }
 
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  footer {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-    font-size: 11px;
-    color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 </style>
 </head>
 <body>
 
-<!-- ── LOGIN SCREEN ─────────────────────────────────────────────── -->
-<div id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">AI Visual Generation</div>
-    <div class="login-title">Project<br>Dashboard</div>
-    <div class="login-sub">Masukkan password yang diberikan oleh tim untuk melihat progress project kamu.</div>
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
 
-    <label class="input-label" for="passInput">Password</label>
-    <div class="input-wrap">
-      <input class="login-input" id="passInput" type="password" placeholder="••••••••" autocomplete="off" />
-    </div>
-    <div class="error-msg" id="errorMsg"></div>
-    <button class="login-btn" onclick="doLogin()">Masuk</button>
-
-    <div class="admin-toggle-wrap">
-      <button class="admin-toggle" onclick="toggleAdmin()">Admin Setup</button>
-    </div>
-
-    <!-- ADMIN SETUP -->
-    <div id="adminSetup">
-      <div class="admin-section-title">Setup Clients</div>
-
-      <div class="base-url-row">
-        <span class="base-url-label">Password Admin</span>
-        <input class="admin-input" id="adminPassword" type="password"
-          placeholder="Password khusus untuk buka Admin Setup ini" />
-        <div class="admin-hint" style="margin-top:6px">
-          Setelah disimpan, Admin Setup hanya bisa dibuka dengan password ini. Jangan sampai lupa.
-        </div>
-      </div>
-
-      <div class="base-url-row">
-        <span class="base-url-label">Base CSV URL (tanpa &amp;gid=...)</span>
-        <input class="admin-input" id="baseUrl" type="text"
-          placeholder="https://docs.google.com/spreadsheets/d/XXXX/pub?output=csv" />
-        <div class="admin-hint" style="margin-top:6px">
-          URL dari "Publish to web" Google Sheet kamu. Setiap client akan pakai URL ini + GID tab mereka.
-        </div>
-      </div>
-
-      <div class="admin-section-title" style="margin-top:4px">Client List</div>
-      <div class="admin-hint">Isi nama client, password unik, dan GID tab sheet mereka.</div>
-
-      <div class="client-row-header">
-        <span>Nama Client</span>
-        <span>Password</span>
-        <span>Sheet GID</span>
-      </div>
-
-      <div id="clientRows"></div>
-
-      <button class="admin-save-btn" onclick="saveConfig()">Simpan Konfigurasi</button>
-
-      <div class="admin-hint" style="margin-top:12px">
-        Cara cari GID: klik tab sheet di Google Sheets, lihat URL. Bagian <code style="color:var(--accent);font-size:10px">gid=XXXXXXX</code> itu adalah GID-nya.
-      </div>
-    </div>
+<!-- LOGIN -->
+<div id="loginScreen" class="screen">
+  <div class="login-card">
+    <div class="login-logo">🔆</div>
+    <div class="login-title">Cek Progress Project</div>
+    <div class="login-sub">Masukkan password yang sudah diberikan untuk melihat status project kamu.</div>
+    <label class="field-label" for="pwdInput">Password</label>
+    <input class="field-input" id="pwdInput" type="password" placeholder="Masukkan password kamu" autocomplete="current-password">
+    <button class="btn-primary" onclick="doLogin()">Masuk</button>
+    <div class="login-error" id="loginError">Password tidak ditemukan. Silakan cek kembali.</div>
+    <div class="admin-link"><a onclick="showAdmin()">Admin Setup</a></div>
   </div>
 </div>
 
-<!-- ── DASHBOARD SCREEN ─────────────────────────────────────────── -->
-<div id="dashboardScreen">
-  <div class="wrapper">
-    <header>
-      <div>
-        <div class="project-label">AI Visual Generation</div>
-        <h1>Project <span id="clientName">Dashboard</span></h1>
-      </div>
-      <div class="header-meta">
-        <div class="last-updated">
-          <div class="live-dot"></div>
-          <span id="lastUpdated">Loading...</span>
-        </div>
-        <button class="icon-btn" onclick="loadData()">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <path d="M11.5 6.5A5 5 0 1 1 6.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M9 1.5L11.5 1.5L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Refresh
-        </button>
-        <button class="logout-btn" onclick="doLogout()">Keluar</button>
-      </div>
-    </header>
-
-    <div class="summary-bar">
-      <div class="summary-pill total"><span class="count" id="totalCount">0</span><span>Total</span></div>
-      <div class="summary-pill plan"><span class="count" id="planCount">0</span><span>Plan</span></div>
-      <div class="summary-pill progress"><span class="count" id="progressCount">0</span><span>On Progress</span></div>
-      <div class="summary-pill done"><span class="count" id="doneCount">0</span><span>Delivered</span></div>
+<!-- ADMIN -->
+<div id="adminPanel" class="screen hidden">
+  <div class="admin-card">
+    <div class="admin-header">
+      <div class="admin-title">Admin Setup</div>
+      <button class="btn-back" onclick="showLogin()">Kembali</button>
     </div>
 
-    <div id="mainContent">
-      <div class="status-message"><div class="spinner"></div><div>Memuat data...</div></div>
+    <div class="admin-section-title">Password Admin</div>
+    <div class="admin-row">
+      <input class="admin-input" id="adminPwd" type="password" placeholder="Buat atau ubah password admin">
+      <div class="admin-hint">Kosongkan jika tidak ingin mengubah password admin saat ini.</div>
     </div>
 
-    <footer>
-      <span>AI Visual Generation — Client Dashboard</span>
-      <span id="footerCount"></span>
-    </footer>
+    <div class="admin-section-title">Google Sheet</div>
+    <div class="admin-row">
+      <input class="admin-input" id="baseUrl" type="text"
+        placeholder="https://script.google.com/macros/s/XXXX/exec">
+      <div class="admin-hint">URL Apps Script proxy. Sudah terisi otomatis, ubah hanya jika deploy script baru.</div>
+    </div>
+
+    <div class="admin-section-title">Daftar Client</div>
+    <div id="clientList"></div>
+    <button class="btn-add-client" onclick="addClientBlock()">+ Tambah Client</button>
+
+    <button class="btn-save" onclick="saveConfig()">Simpan Konfigurasi</button>
+    <div class="save-msg" id="saveMsg">Konfigurasi berhasil disimpan!</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="screen hidden">
+  <div class="dash-header">
+    <div class="dash-logo">
+      <div class="dash-logo-icon">🔆</div>
+      <div class="dash-logo-name">Project Tracker</div>
+    </div>
+    <div class="dash-meta">
+      <span class="dash-client-label" id="dashClientName"></span>
+      <button class="btn-logout" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-greeting">
+      <h1 id="dashGreeting">Halo!</h1>
+      <p id="dashSub">Berikut status project kamu saat ini.</p>
+    </div>
+    <div class="summary-bar" id="summaryBar"></div>
+    <div id="projectsContainer"></div>
   </div>
 </div>
 
 <script>
-  // ── CONFIG ────────────────────────────────────────────────────────
-  // Default config — admin bisa override via Admin Setup di login screen
-  // Format: { baseUrl, clients: [{name, password, gid}] }
+/* ── CONFIG ─────────────────────────────────────────────────────── */
+const CFG_KEY = 'neonbox_cfg_v1';
 
-  const CONFIG_KEY = 'aivg_config';
-  const SESSION_KEY = 'aivg_session';
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem(CFG_KEY)) || { adminPwd:'', baseUrl:'', clients:[] }; }
+  catch(e) { return { adminPwd:'', baseUrl:'', clients:[] }; }
+}
+function setConfig(cfg) { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
 
-  function getConfig() {
-    const raw = localStorage.getItem(CONFIG_KEY);
-    if (raw) {
-      try { return JSON.parse(raw); } catch(e) {}
+/* ── SCREENS ─────────────────────────────────────────────────────── */
+function showLogin() {
+  set('loginScreen',''); set('adminPanel','hidden'); set('dashboard','hidden');
+}
+function showDashboardScreen() {
+  set('loginScreen','hidden'); set('adminPanel','hidden'); set('dashboard','');
+}
+function showAdminScreen() {
+  set('loginScreen','hidden'); set('adminPanel',''); set('dashboard','hidden');
+  renderAdminForm();
+}
+function set(id, cls) {
+  const el = document.getElementById(id);
+  if (cls === 'hidden') el.classList.add('hidden');
+  else el.classList.remove('hidden');
+}
+
+/* ── LOGIN ───────────────────────────────────────────────────────── */
+function doLogin() {
+  const pwd = document.getElementById('pwdInput').value.trim();
+  const cfg = getConfig();
+  const client = (cfg.clients || []).find(c => c.password === pwd);
+  if (!client) {
+    document.getElementById('loginError').classList.add('show'); return;
+  }
+  document.getElementById('loginError').classList.remove('show');
+  sessionStorage.setItem('activeClient', JSON.stringify(client));
+  loadDashboard(client);
+}
+document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogout() {
+  sessionStorage.removeItem('activeClient');
+  document.getElementById('pwdInput').value = '';
+  showLogin();
+}
+
+/* ── ADMIN ───────────────────────────────────────────────────────── */
+function showAdmin() {
+  const cfg = getConfig();
+  if (cfg.adminPwd) {
+    const input = prompt('Masukkan password admin:');
+    if (input !== cfg.adminPwd) { alert('Password admin salah.'); return; }
+  }
+  showAdminScreen();
+}
+
+let _cid = 0;
+
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbwXLR_Hf7vABZ2EUPRWTndPcfXzL8LERe5Y_C6od_r7_5Ye4SZDz_HwGwtDaDzeaK51OQ/exec';
+
+function renderAdminForm() {
+  const cfg = getConfig();
+  document.getElementById('baseUrl').value = cfg.baseUrl || PROXY_URL;
+  document.getElementById('adminPwd').value = '';
+  document.getElementById('clientList').innerHTML = '';
+  _cid = 0;
+  (cfg.clients || []).forEach(c => addClientBlock(c));
+}
+
+function addClientBlock(data) {
+  data = data || {};
+  _cid++;
+  const id = _cid;
+  const d = document.createElement('div');
+  d.className = 'client-block';
+  d.dataset.cid = id;
+  d.innerHTML = `
+    <div class="client-block-head">
+      <span class="client-block-label">Client #${id}</span>
+      <button class="client-remove" onclick="removeClient(${id})">Hapus</button>
+    </div>
+    <div class="client-grid">
+      <div>
+        <div class="field-mini-label">Nama Client</div>
+        <input class="admin-input" data-f="name" value="${esc(data.name||'')}" placeholder="Nama client">
+      </div>
+      <div>
+        <div class="field-mini-label">Password</div>
+        <input class="admin-input" data-f="password" value="${esc(data.password||'')}" placeholder="Password unik">
+      </div>
+      <div style="grid-column:1/-1">
+        <div class="field-mini-label">GID Tab Sheet</div>
+        <input class="admin-input" data-f="gid" value="${esc(String(data.gid||''))}" placeholder="Contoh: 0">
+        <div class="admin-hint">Angka setelah gid= di URL Google Sheet saat tab tersebut aktif.</div>
+      </div>
+    </div>`;
+  document.getElementById('clientList').appendChild(d);
+}
+
+function removeClient(id) {
+  const el = document.querySelector(`.client-block[data-cid="${id}"]`);
+  if (el) el.remove();
+}
+
+function saveConfig() {
+  const cfg = getConfig();
+  const newPwd = document.getElementById('adminPwd').value.trim();
+  if (newPwd) cfg.adminPwd = newPwd;
+  cfg.baseUrl = document.getElementById('baseUrl').value.trim();
+  cfg.clients = [];
+  document.querySelectorAll('#clientList .client-block').forEach(b => {
+    cfg.clients.push({
+      name:     b.querySelector('[data-f="name"]').value.trim(),
+      password: b.querySelector('[data-f="password"]').value.trim(),
+      gid:      b.querySelector('[data-f="gid"]').value.trim(),
+    });
+  });
+  setConfig(cfg);
+  const msg = document.getElementById('saveMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 3000);
+}
+
+/* ── DASHBOARD LOAD ──────────────────────────────────────────────── */
+async function loadDashboard(client) {
+  showDashboardScreen();
+  document.getElementById('dashClientName').textContent = client.name;
+  document.getElementById('dashGreeting').textContent   = `Halo, ${client.name}!`;
+  document.getElementById('dashSub').textContent        = 'Berikut status project kamu saat ini.';
+  document.getElementById('summaryBar').innerHTML       = '';
+  document.getElementById('projectsContainer').innerHTML =
+    `<div class="state-box"><div class="spinner"></div><div class="state-sub">Memuat data project...</div></div>`;
+
+  const cfg = getConfig();
+  const proxyBase = cfg.baseUrl || '';
+
+  if (!proxyBase) {
+    document.getElementById('projectsContainer').innerHTML = `
+      <div class="state-box">
+        <div class="state-icon">⚙️</div>
+        <div class="state-title">Belum dikonfigurasi</div>
+        <div class="state-sub">Masuk ke Admin Setup dan isi URL Apps Script proxy.</div>
+      </div>`;
+    return;
+  }
+
+  const url = proxyBase + (client.gid ? `?gid=${client.gid}` : '');
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const csv = await res.text();
+    if (!csv || csv.trim().length < 5) throw new Error('Data kosong');
+    const projects = parseCsv(csv);
+    renderProjects(projects);
+  } catch(err) {
+    document.getElementById('projectsContainer').innerHTML = `
+      <div class="state-box">
+        <div class="state-icon">⚠️</div>
+        <div class="state-title">Gagal memuat data</div>
+        <div class="state-sub">Cek koneksi internet atau hubungi admin.<br>
+          <small style="color:#bbb;font-size:11px">${err.message}</small>
+        </div>
+      </div>`;
+  }
+}
+
+/* ── CSV PARSER ──────────────────────────────────────────────────── */
+function parseCsv(text) {
+  const rows = [];
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') {
+        if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+        else inQ = !inQ;
+      } else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += c;
     }
-    // default empty
-    return {
-      baseUrl: '',
-      adminPassword: '',
-      clients: [
-        { name: 'Client 1', password: '', gid: '' },
-        { name: 'Client 2', password: '', gid: '' },
-        { name: 'Client 3', password: '', gid: '' },
-        { name: 'Client 4', password: '', gid: '' },
-        { name: 'Client 5', password: '', gid: '' },
-      ]
-    };
+    cols.push(cur.trim());
+    rows.push(cols);
   }
+  if (rows.length < 2) return [];
 
-  function saveConfig() {
-    const baseUrl = document.getElementById('baseUrl').value.trim();
-    const adminPassword = document.getElementById('adminPassword').value.trim();
-    const rows = document.querySelectorAll('.client-data-row');
-    const clients = Array.from(rows).map(row => ({
-      name: row.querySelector('.cn').value.trim(),
-      password: row.querySelector('.cp').value.trim(),
-      gid: row.querySelector('.cg').value.trim(),
-    })).filter(c => c.name || c.password || c.gid);
+  const hdr = rows[0].map(h => h.toLowerCase().trim());
+  const ci = kws => { const i = hdr.findIndex(h => kws.some(k => h.includes(k))); return i >= 0 ? i : -1; };
 
-    const config = { baseUrl, adminPassword, clients };
-    localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+  const iProject = ci(['nama project','project name','project']);
+  const iTipe    = ci(['tipe barang','tipe','type','jenis']);
+  const iSpek    = ci(['spesifikasi','spec','detail','keterangan']);
+  const iStatus  = ci(['status']);
+  const iMulai   = ci(['mulai','start','tgl mulai','tanggal mulai']);
+  const iDeadline= ci(['deadline','tgl deadline','selesai','end']);
+  const iPIC     = ci(['pic','penanggung','person in charge']);
 
-    document.getElementById('adminSetup').style.display = 'none';
-    sessionStorage.removeItem(ADMIN_PASS_KEY);
-    showToast('Konfigurasi tersimpan.');
-  }
-
-  function buildClientRows() {
-    const config = getConfig();
-    document.getElementById('baseUrl').value = config.baseUrl || '';
-    document.getElementById('adminPassword').value = config.adminPassword || '';
-    const container = document.getElementById('clientRows');
-    container.innerHTML = '';
-    const list = config.clients.length ? config.clients : Array(5).fill({ name: '', password: '', gid: '' });
-    list.forEach((c, i) => {
-      const row = document.createElement('div');
-      row.className = 'client-row client-data-row';
-      row.innerHTML = `
-        <input class="admin-input cn" type="text" placeholder="Client ${i+1}" value="${escHtml(c.name || '')}" />
-        <input class="admin-input cp" type="text" placeholder="password${i+1}" value="${escHtml(c.password || '')}" />
-        <input class="admin-input cg" type="text" placeholder="0" value="${escHtml(c.gid || '')}" />
-      `;
-      container.appendChild(row);
+  const map = {};
+  for (let r = 1; r < rows.length; r++) {
+    const row = rows[r];
+    if (!row.some(c => c)) continue;
+    const name = iProject >= 0 ? row[iProject] : '';
+    if (!name) continue;
+    if (!map[name]) {
+      map[name] = {
+        name,
+        status:   iStatus  >= 0 ? row[iStatus]  : '',
+        tglMulai: iMulai   >= 0 ? row[iMulai]   : '',
+        deadline: iDeadline>= 0 ? row[iDeadline] : '',
+        pic:      iPIC     >= 0 ? row[iPIC]      : '',
+        items: [],
+      };
+    }
+    map[name].items.push({
+      tipe: iTipe >= 0 ? row[iTipe] : '',
+      spek: iSpek >= 0 ? row[iSpek] : '',
     });
   }
+  return Object.values(map);
+}
 
-  const ADMIN_PASS_KEY = 'aivg_admin_auth';
-
-  function toggleAdmin() {
-    const el = document.getElementById('adminSetup');
-    const visible = el.style.display === 'block';
-
-    if (visible) {
-      el.style.display = 'none';
-      sessionStorage.removeItem(ADMIN_PASS_KEY);
-      return;
-    }
-
-    // Cek apakah sudah auth di sesi ini
-    if (sessionStorage.getItem(ADMIN_PASS_KEY) === '1') {
-      el.style.display = 'block';
-      buildClientRows();
-      return;
-    }
-
-    // Minta password admin
-    const config = getConfig();
-    const adminPass = config.adminPassword;
-
-    // Kalau belum ada admin password (setup pertama kali), langsung buka
-    if (!adminPass) {
-      el.style.display = 'block';
-      buildClientRows();
-      return;
-    }
-
-    const entered = prompt('Masukkan password admin:');
-    if (entered === null) return; // cancelled
-    if (entered === adminPass) {
-      sessionStorage.setItem(ADMIN_PASS_KEY, '1');
-      el.style.display = 'block';
-      buildClientRows();
-    } else {
-      showToast('Password admin salah.');
-    }
+/* ── RENDER ──────────────────────────────────────────────────────── */
+function renderProjects(projects) {
+  if (!projects.length) {
+    document.getElementById('projectsContainer').innerHTML = `
+      <div class="state-box">
+        <div class="state-icon">📭</div>
+        <div class="state-title">Belum ada project</div>
+        <div class="state-sub">Data project akan tampil di sini setelah diisi di Google Sheet.</div>
+      </div>`;
+    return;
   }
 
-  // ── AUTH ──────────────────────────────────────────────────────────
-  function doLogin() {
-    const pass = document.getElementById('passInput').value.trim();
-    const config = getConfig();
-    const input = document.getElementById('passInput');
-    const errMsg = document.getElementById('errorMsg');
+  // Summary chips
+  const cnt = { '25':0,'50':0,'75':0,'100':0 };
+  projects.forEach(p => { const k = pct(p.status); if (cnt[k] !== undefined) cnt[k]++; });
+  let chips = '';
+  if (cnt['25'])  chips += mkChip('25',  cnt['25']);
+  if (cnt['50'])  chips += mkChip('50',  cnt['50']);
+  if (cnt['75'])  chips += mkChip('75',  cnt['75']);
+  if (cnt['100']) chips += mkChip('100', cnt['100']);
+  document.getElementById('summaryBar').innerHTML = chips;
 
-    if (!config.baseUrl || !config.clients.length) {
-      errMsg.textContent = 'Konfigurasi belum diisi. Klik Admin Setup terlebih dahulu.';
-      return;
-    }
+  // Cards
+  const grid = document.createElement('div');
+  grid.className = 'projects-grid';
+  projects.forEach(p => grid.appendChild(buildCard(p)));
+  document.getElementById('projectsContainer').innerHTML = '';
+  document.getElementById('projectsContainer').appendChild(grid);
+}
 
-    const match = config.clients.find(c => c.password && c.password === pass);
-    if (!match) {
-      input.classList.add('error');
-      errMsg.textContent = 'Password salah. Coba lagi.';
-      setTimeout(() => input.classList.remove('error'), 500);
-      return;
-    }
+function mkChip(p, n) {
+  return `<div class="summary-chip chip-${p}"><div class="chip-dot"></div>${n} project &bull; ${p}%</div>`;
+}
 
-    // Save session
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ name: match.name, gid: match.gid }));
-    showDashboard(match);
-  }
+function pct(status) {
+  if (!status) return 'other';
+  const s = String(status).replace('%','').trim();
+  if (['25','50','75','100'].includes(s)) return s;
+  const m = s.match(/\d+/);
+  if (m) { const n = parseInt(m[0]); if (n<=25) return '25'; if (n<=50) return '50'; if (n<=75) return '75'; return '100'; }
+  return 'other';
+}
 
-  function doLogout() {
-    sessionStorage.removeItem(SESSION_KEY);
-    document.getElementById('dashboardScreen').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('passInput').value = '';
-    document.getElementById('errorMsg').textContent = '';
-    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-  }
+function buildCard(p) {
+  const pp  = pct(p.status);
+  const lbl = pp === 'other' ? (p.status || '-') : pp + '%';
+  const w   = pp === 'other' ? 5 : parseInt(pp);
+  const ini = (p.pic||'-').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 
-  // ── DASHBOARD ─────────────────────────────────────────────────────
-  let currentGid = '';
-  let autoRefreshTimer = null;
-
-  function showDashboard(client) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashboardScreen').style.display = 'block';
-    document.getElementById('clientName').textContent = client.name;
-    currentGid = client.gid;
-    loadData();
-    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-    autoRefreshTimer = setInterval(loadData, 60000);
-  }
-
-  function buildCsvUrl() {
-    const config = getConfig();
-    let base = config.baseUrl;
-    if (!base) return null;
-
-    // Strip all existing relevant params so we can rebuild cleanly
-    base = base
-      .replace(/[&?]output=[^&]*/g, '')
-      .replace(/[&?]gid=[^&]*/g, '')
-      .replace(/[&?]single=[^&]*/g, '')
-      .replace(/[&?]t=[^&]*/g, '')
-      .replace(/\?$/, '');
-
-    const sep = base.includes('?') ? '&' : '?';
-    // Only append gid if it's set and non-empty
-    const gidPart = currentGid !== '' ? `&gid=${currentGid}&single=true` : '';
-    return `${base}${sep}output=csv${gidPart}&t=${Date.now()}`;
-  }
-
-  async function loadData() {
-    const url = buildCsvUrl();
-    if (!url) return;
-
-    document.getElementById('mainContent').innerHTML = `
-      <div class="status-message"><div class="spinner"></div><div>Memuat data...</div></div>`;
-    document.getElementById('lastUpdated').textContent = 'Fetching...';
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const text = await res.text();
-      const items = parseCSV(text);
-      if (!items.length) {
-        document.getElementById('mainContent').innerHTML = `
-          <div class="status-message" style="font-size:14px;line-height:1.8">
-            Sheet terhubung tapi belum ada data.<br>
-            <span style="font-size:12px;color:var(--muted)">Pastikan format kolom sudah sesuai dan ada minimal satu baris data.</span>
-          </div>`;
-        return;
-      }
-      renderBoard(items);
-    } catch(err) {
-      document.getElementById('mainContent').innerHTML = `
-        <div class="status-message">
-          <div style="font-size:14px;line-height:1.8;color:var(--muted)">
-            Gagal mengambil data. Pastikan URL dan GID sudah benar.<br>
-            <span style="font-size:12px;color:var(--error)">${err.message}</span>
+  let itemsHtml = '';
+  if (p.items && p.items.length) {
+    const rows = p.items.map((item, i) => {
+      const specs = parseSpek(item.spek);
+      const iconCls = iconClass(item.tipe);
+      const emoji   = iconEmoji(item.tipe);
+      return `
+        <div class="item-row" id="ir-${i}-${Date.now()}">
+          <div class="item-header" onclick="toggleItem(this.parentElement)">
+            <div class="item-left">
+              <div class="item-icon ${iconCls}">${emoji}</div>
+              <div class="item-name">${esc(item.tipe || 'Item')}</div>
+            </div>
+            <div class="item-chevron">▾</div>
+          </div>
+          <div class="item-detail">
+            ${specs.map(s => `
+              <div class="spec-row">
+                <span class="spec-key">${esc(s.key)}</span>
+                <span class="spec-val">${esc(s.val)}</span>
+              </div>`).join('')}
           </div>
         </div>`;
-      document.getElementById('lastUpdated').textContent = 'Gagal memuat';
-    }
+    }).join('');
+    itemsHtml = `<div class="items-section"><div class="items-label">Tipe Barang &amp; Spesifikasi</div>${rows}</div>`;
   }
 
-  // ── RENDER ────────────────────────────────────────────────────────
-  function renderBoard(items) {
-    const cols = { 'Plan': [], 'On Progress': [], 'Delivered': [] };
-    items.forEach(item => cols[normalizeStatus(item.status)].push(item));
+  const card = document.createElement('div');
+  card.className = 'project-card';
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="card-name">${esc(p.name)}</div>
+      <div class="status-badge badge-${pp}">${lbl}</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill fill-${pp}" style="width:0%" data-target="${w}"></div>
+    </div>
+    <div class="card-dates">
+      <div class="date-item"><span class="date-label">Mulai</span><span class="date-val">${esc(p.tglMulai||'-')}</span></div>
+      <div class="date-item"><span class="date-label">Deadline</span><span class="date-val">${esc(p.deadline||'-')}</span></div>
+    </div>
+    <div class="card-pic">
+      <div class="pic-avatar">${ini}</div>
+      <div class="pic-name">${esc(p.pic||'-')}</div>
+    </div>
+    ${itemsHtml}
+  `;
 
-    const mk = (arr, empty) => arr.length
-      ? arr.map(renderCard).join('')
-      : `<div class="empty-state">${empty}</div>`;
-
-    document.getElementById('mainContent').innerHTML = `
-      <div class="kanban">
-        <div class="column col-plan">
-          <div class="col-header">
-            <div class="col-title"><div class="col-icon"></div>Plan</div>
-            <span class="col-count">${cols['Plan'].length}</span>
-          </div>
-          <div class="col-body">${mk(cols['Plan'], 'Belum ada request yang diplan.')}</div>
-        </div>
-        <div class="column col-progress">
-          <div class="col-header">
-            <div class="col-title"><div class="col-icon"></div>On Progress</div>
-            <span class="col-count">${cols['On Progress'].length}</span>
-          </div>
-          <div class="col-body">${mk(cols['On Progress'], 'Tidak ada yang sedang dikerjakan.')}</div>
-        </div>
-        <div class="column col-done">
-          <div class="col-header">
-            <div class="col-title"><div class="col-icon"></div>Delivered</div>
-            <span class="col-count">${cols['Delivered'].length}</span>
-          </div>
-          <div class="col-body">${mk(cols['Delivered'], 'Belum ada yang terdeliver.')}</div>
-        </div>
-      </div>`;
-
-    document.getElementById('totalCount').textContent = items.length;
-    document.getElementById('planCount').textContent = cols['Plan'].length;
-    document.getElementById('progressCount').textContent = cols['On Progress'].length;
-    document.getElementById('doneCount').textContent = cols['Delivered'].length;
-    document.getElementById('footerCount').textContent = `${items.length} total requests`;
-
-    const now = new Date();
-    document.getElementById('lastUpdated').textContent =
-      `Last updated ${now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
-  }
-
-  function renderCard(item) {
-    const typeClass = item.type.toLowerCase() === 'video' ? 'type-video' : 'type-photo';
-    const hasLink = item.link && item.link.startsWith('http');
-    return `
-      <div class="card">
-        <div class="card-top">
-          <div class="card-name">${escHtml(item.name)}</div>
-          <span class="type-badge ${typeClass}">${escHtml(item.type || 'Photo')}</span>
-        </div>
-        ${item.date ? `<div class="card-date">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M8 1v2M1 5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          ${escHtml(item.date)}</div>` : ''}
-        ${item.notes ? `<div class="card-notes">${escHtml(item.notes)}</div>` : ''}
-        ${hasLink ? `<a href="${item.link}" target="_blank" rel="noopener" class="card-link">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M5 2H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7M7 1h4m0 0v4m0-4L5.5 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          View File</a>` : ''}
-      </div>`;
-  }
-
-  // ── CSV PARSER ────────────────────────────────────────────────────
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const result = [];
-    const start = lines[0]?.toLowerCase().includes('request') ? 1 : 0;
-    for (let i = start; i < lines.length; i++) {
-      const cols = parseCSVLine(lines[i]);
-      if (!cols[0]?.trim()) continue;
-      result.push({
-        name: cols[0]?.trim() || '',
-        type: cols[1]?.trim() || 'Photo',
-        status: cols[2]?.trim() || 'Plan',
-        date: cols[3]?.trim() || '',
-        notes: cols[4]?.trim() || '',
-        link: cols[5]?.trim() || ''
-      });
-    }
-    return result;
-  }
-
-  function parseCSVLine(line) {
-    const result = []; let cur = ''; let inQ = false;
-    for (const ch of line) {
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === ',' && !inQ) { result.push(cur); cur = ''; }
-      else { cur += ch; }
-    }
-    result.push(cur);
-    return result;
-  }
-
-  function normalizeStatus(raw) {
-    const s = (raw || '').toLowerCase().trim();
-    if (s === 'plan' || s === 'planned') return 'Plan';
-    if (s.includes('progress') || s === 'wip' || s === 'ongoing') return 'On Progress';
-    if (s === 'delivered' || s === 'done' || s === 'complete' || s === 'completed') return 'Delivered';
-    return 'Plan';
-  }
-
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function showToast(msg) {
-    const t = document.createElement('div');
-    t.style.cssText = `position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--accent);color:#0d0d0f;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:10px 22px;border-radius:100px;z-index:9999;animation:fadeUp 0.3s ease`;
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-  }
-
-  // Enter key on password field
-  document.getElementById('passInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
+  // Animate progress bar after insertion
+  requestAnimationFrame(() => {
+    const fill = card.querySelector('.progress-fill');
+    if (fill) setTimeout(() => fill.style.width = fill.dataset.target + '%', 80);
   });
+  return card;
+}
 
-  // Check existing session on load
-  const saved = sessionStorage.getItem(SESSION_KEY);
-  if (saved) {
-    try {
-      const sess = JSON.parse(saved);
-      const config = getConfig();
-      const match = config.clients.find(c => c.name === sess.name && c.gid === sess.gid);
-      if (match) showDashboard(match);
-    } catch(e) {}
+function iconClass(t) {
+  const s = (t||'').toLowerCase();
+  if (s.includes('neon'))  return 'icon-neon';
+  if (s.includes('huruf')) return 'icon-huruf';
+  return 'icon-other';
+}
+function iconEmoji(t) {
+  const s = (t||'').toLowerCase();
+  if (s.includes('neon'))  return '💡';
+  if (s.includes('huruf')) return '🔤';
+  return '📦';
+}
+
+function parseSpek(spek) {
+  if (!spek) return [{ key:'Detail', val:'-' }];
+  // Try semicolon key:val
+  const sp = spek.split(';').map(s=>s.trim()).filter(Boolean);
+  if (sp.some(s=>s.includes(':'))) {
+    return sp.map(s => { const i=s.indexOf(':'); return { key:s.slice(0,i).trim(), val:s.slice(i+1).trim() }; });
   }
+  // Try comma key:val
+  const cp = spek.split(',').map(s=>s.trim()).filter(Boolean);
+  if (cp.some(s=>s.includes(':'))) {
+    return cp.map(s => { const i=s.indexOf(':'); return { key:s.slice(0,i).trim(), val:s.slice(i+1).trim() }; });
+  }
+  return [{ key:'Detail', val:spek }];
+}
+
+function toggleItem(row) { row.classList.toggle('open'); }
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── INIT ────────────────────────────────────────────────────────── */
+(function init() {
+  const saved = sessionStorage.getItem('activeClient');
+  if (saved) {
+    try { loadDashboard(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('activeClient'); }
+  }
+  showLogin();
+})();
 </script>
 </body>
 </html>
