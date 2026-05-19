@@ -636,6 +636,15 @@
       <div class="admin-section-title">Setup Clients</div>
 
       <div class="base-url-row">
+        <span class="base-url-label">Password Admin</span>
+        <input class="admin-input" id="adminPassword" type="password"
+          placeholder="Password khusus untuk buka Admin Setup ini" />
+        <div class="admin-hint" style="margin-top:6px">
+          Setelah disimpan, Admin Setup hanya bisa dibuka dengan password ini. Jangan sampai lupa.
+        </div>
+      </div>
+
+      <div class="base-url-row">
         <span class="base-url-label">Base CSV URL (tanpa &amp;gid=...)</span>
         <input class="admin-input" id="baseUrl" type="text"
           placeholder="https://docs.google.com/spreadsheets/d/XXXX/pub?output=csv" />
@@ -722,6 +731,7 @@
     // default empty
     return {
       baseUrl: '',
+      adminPassword: '',
       clients: [
         { name: 'Client 1', password: '', gid: '' },
         { name: 'Client 2', password: '', gid: '' },
@@ -734,6 +744,7 @@
 
   function saveConfig() {
     const baseUrl = document.getElementById('baseUrl').value.trim();
+    const adminPassword = document.getElementById('adminPassword').value.trim();
     const rows = document.querySelectorAll('.client-data-row');
     const clients = Array.from(rows).map(row => ({
       name: row.querySelector('.cn').value.trim(),
@@ -741,16 +752,18 @@
       gid: row.querySelector('.cg').value.trim(),
     })).filter(c => c.name || c.password || c.gid);
 
-    const config = { baseUrl, clients };
+    const config = { baseUrl, adminPassword, clients };
     localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
 
     document.getElementById('adminSetup').style.display = 'none';
+    sessionStorage.removeItem(ADMIN_PASS_KEY);
     showToast('Konfigurasi tersimpan.');
   }
 
   function buildClientRows() {
     const config = getConfig();
     document.getElementById('baseUrl').value = config.baseUrl || '';
+    document.getElementById('adminPassword').value = config.adminPassword || '';
     const container = document.getElementById('clientRows');
     container.innerHTML = '';
     const list = config.clients.length ? config.clients : Array(5).fill({ name: '', password: '', gid: '' });
@@ -766,11 +779,45 @@
     });
   }
 
+  const ADMIN_PASS_KEY = 'aivg_admin_auth';
+
   function toggleAdmin() {
     const el = document.getElementById('adminSetup');
     const visible = el.style.display === 'block';
-    el.style.display = visible ? 'none' : 'block';
-    if (!visible) buildClientRows();
+
+    if (visible) {
+      el.style.display = 'none';
+      sessionStorage.removeItem(ADMIN_PASS_KEY);
+      return;
+    }
+
+    // Cek apakah sudah auth di sesi ini
+    if (sessionStorage.getItem(ADMIN_PASS_KEY) === '1') {
+      el.style.display = 'block';
+      buildClientRows();
+      return;
+    }
+
+    // Minta password admin
+    const config = getConfig();
+    const adminPass = config.adminPassword;
+
+    // Kalau belum ada admin password (setup pertama kali), langsung buka
+    if (!adminPass) {
+      el.style.display = 'block';
+      buildClientRows();
+      return;
+    }
+
+    const entered = prompt('Masukkan password admin:');
+    if (entered === null) return; // cancelled
+    if (entered === adminPass) {
+      sessionStorage.setItem(ADMIN_PASS_KEY, '1');
+      el.style.display = 'block';
+      buildClientRows();
+    } else {
+      showToast('Password admin salah.');
+    }
   }
 
   // ── AUTH ──────────────────────────────────────────────────────────
