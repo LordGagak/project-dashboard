@@ -590,7 +590,7 @@ async function doLogin() {
 
   try {
     const cfg = await fetchConfig();
-    const client = (cfg.clients || []).find(c => c.password === pwd);
+    const client = (cfg.clients || []).find(c => String(c.password) === String(pwd));
     if (!client) {
       document.getElementById('loginError').classList.add('show');
       btn.textContent = 'Masuk'; btn.disabled = false;
