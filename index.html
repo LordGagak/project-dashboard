@@ -4,356 +4,487 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --yellow:  #FFD93D;
-    --orange:  #FF6B35;
-    --green:   #4ECB71;
-    --blue:    #4D96FF;
-    --pink:    #FF6FB8;
-    --teal:    #00C9B1;
-    --bg:      #FFFBF4;
-    --surface: #FFFFFF;
-    --border:  #EDE6D8;
-    --text:    #1C1408;
-    --muted:   #8A7560;
-    --radius:  14px;
-  }
+:root {
+  --sapphire:  #1E40AF;
+  --sapphire2: #2563EB;
+  --ice:       #DBEAFE;
+  --lemon:     #FFF3B0;
+  --navy:      #0F172A;
+  --sky:       #7DD3FC;
+  --yellow:    #FFE082;
+  --slate:     #64748B;
+  --mist:      #E2E8F0;
+  --bg:        #F0F6FF;
+  --surface:   #FFFFFF;
+  --text:      #0F172A;
+  --muted:     #64748B;
+  --radius:    16px;
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-  /* ─── BLOBS ─── */
-  .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .blob  { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .16; }
-  .blob-1 { width: 540px; height: 540px; background: var(--yellow); top: -140px; left: -140px; }
-  .blob-2 { width: 420px; height: 420px; background: var(--orange); top: 45%;   right: -100px; }
-  .blob-3 { width: 380px; height: 380px; background: var(--teal);   bottom: -80px; left: 28%; }
+/* BLOBS */
+.blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.blob  { position: absolute; border-radius: 50%; filter: blur(100px); opacity: .12; }
+.blob-1 { width: 600px; height: 600px; background: var(--sapphire); top: -160px; left: -160px; }
+.blob-2 { width: 400px; height: 400px; background: var(--sky);      top: 50%; right: -100px; }
+.blob-3 { width: 350px; height: 350px; background: var(--lemon);    bottom: -80px; left: 30%; }
 
-  /* ─── SCREENS ─── */
-  .screen { position: relative; z-index: 1; }
-  .hidden { display: none !important; }
+.screen { position: relative; z-index: 1; }
+.hidden { display: none !important; }
 
-  /* ─── LOGIN ─── */
-  #loginScreen {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 40px 20px;
-  }
-  .login-card {
-    width: 100%; max-width: 420px;
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 24px;
-    padding: 48px 40px 40px;
-    box-shadow: 0 8px 48px rgba(28,20,8,.09);
-    animation: fadeUp .45s ease both;
-  }
-  @media (max-width: 480px) { .login-card { padding: 36px 24px 28px; } }
+/* ── LOGIN ── */
+#loginScreen {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
 
-  .login-logo {
-    width: 52px; height: 52px;
-    background: var(--yellow);
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 24px; font-size: 24px;
-  }
-  .login-title { font-size: 24px; font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
-  .login-sub   { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.login-card {
+  width: 100%; max-width: 420px;
+  background: var(--surface);
+  border: 1.5px solid var(--mist);
+  border-radius: 24px;
+  padding: 48px 40px 40px;
+  box-shadow: 0 8px 48px rgba(30,64,175,.1);
+  animation: fadeUp .45s ease both;
+}
+@media (max-width: 480px) { .login-card { padding: 32px 22px 28px; } }
 
-  .field-label { font-size: 13px; font-weight: 600; letter-spacing: .02em; margin-bottom: 8px; display: block; }
-  .field-input {
-    width: 100%; padding: 12px 16px;
-    border: 1.5px solid var(--border); border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 15px;
-    background: var(--bg); color: var(--text);
-    outline: none; transition: border-color .2s; margin-bottom: 20px;
-  }
-  .field-input:focus { border-color: var(--orange); background: #fff; }
+.login-logo {
+  width: 56px; height: 56px;
+  background: var(--sapphire);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(30,64,175,.3);
+}
 
-  .btn-primary {
-    width: 100%; padding: 14px;
-    background: var(--orange); color: #fff;
-    border: none; border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: background .2s, transform .1s;
-  }
-  .btn-primary:hover  { background: #e85c28; }
-  .btn-primary:active { transform: scale(.98); }
+.login-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
+.login-sub   { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
 
-  .login-error {
-    margin-top: 14px; padding: 10px 14px;
-    background: #fff0ec; border: 1px solid #ffc4b3;
-    border-radius: 8px; font-size: 13px; color: #c0391b; display: none;
-  }
-  .login-error.show { display: block; }
+.field-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; color: var(--navy); }
+.field-input {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid var(--mist); border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  background: var(--bg); color: var(--text);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  margin-bottom: 20px;
+}
+.field-input:focus { border-color: var(--sapphire); box-shadow: 0 0 0 3px rgba(30,64,175,.1); background: #fff; }
 
-  .admin-link { margin-top: 24px; text-align: center; font-size: 12px; color: var(--muted); }
-  .admin-link a { color: var(--muted); text-decoration: underline; cursor: pointer; }
-  .admin-link a:hover { color: var(--text); }
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: var(--sapphire); color: #fff;
+  border: none; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: background .2s, transform .1s;
+  box-shadow: 0 4px 14px rgba(30,64,175,.3);
+}
+.btn-primary:hover  { background: var(--sapphire2); }
+.btn-primary:active { transform: scale(.98); }
 
-  /* ─── ADMIN PANEL ─── */
-  #adminPanel { min-height: 100vh; padding: 40px 20px 60px; display: flex; flex-direction: column; align-items: center; }
-  .admin-card {
-    width: 100%; max-width: 680px;
-    background: var(--surface);
-    border: 1.5px solid var(--border); border-radius: 24px;
-    padding: 40px; box-shadow: 0 8px 48px rgba(28,20,8,.08);
-    animation: fadeUp .4s ease both;
-  }
-  @media (max-width: 480px) { .admin-card { padding: 24px 18px; } }
+.login-error {
+  margin-top: 14px; padding: 10px 14px;
+  background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 8px; font-size: 13px; color: #b91c1c; display: none;
+}
+.login-error.show { display: block; }
 
-  .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-  .admin-title  { font-size: 20px; font-weight: 700; }
+.admin-link { margin-top: 24px; text-align: center; font-size: 12px; color: var(--muted); }
+.admin-link a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+.admin-link a:hover { color: var(--sapphire); }
 
-  .btn-back {
-    padding: 8px 16px; background: var(--bg);
-    border: 1.5px solid var(--border); border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-    cursor: pointer; color: var(--text); transition: background .2s;
-  }
-  .btn-back:hover { background: var(--border); }
+/* ── ADMIN ── */
+#adminPanel { min-height: 100vh; padding: 40px 20px 60px; display: flex; flex-direction: column; align-items: center; }
+.admin-card {
+  width: 100%; max-width: 680px;
+  background: var(--surface); border: 1.5px solid var(--mist);
+  border-radius: 24px; padding: 40px;
+  box-shadow: 0 8px 48px rgba(30,64,175,.08);
+  animation: fadeUp .4s ease both;
+}
+@media (max-width: 480px) { .admin-card { padding: 24px 18px; } }
 
-  .admin-section-title {
-    font-size: 12px; font-weight: 700; letter-spacing: .06em;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 12px; margin-top: 28px;
-  }
-  .admin-section-title:first-of-type { margin-top: 0; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.admin-title  { font-size: 20px; font-weight: 700; color: var(--navy); }
 
-  .admin-row { margin-bottom: 16px; }
-  .admin-input {
-    width: 100%; padding: 11px 14px;
-    border: 1.5px solid var(--border); border-radius: 9px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px;
-    background: var(--bg); color: var(--text);
-    outline: none; transition: border-color .2s;
-  }
-  .admin-input:focus { border-color: var(--orange); background: #fff; }
-  .admin-hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.btn-back {
+  padding: 8px 16px; background: var(--bg);
+  border: 1.5px solid var(--mist); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; color: var(--text); transition: background .2s;
+}
+.btn-back:hover { background: var(--mist); }
 
-  .client-block {
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 18px; margin-bottom: 10px;
-  }
-  .client-block-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .client-block-label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-  .client-remove { font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'DM Sans',sans-serif; }
-  .client-remove:hover { color: var(--orange); }
-  .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media (max-width: 480px) { .client-grid { grid-template-columns: 1fr; } }
-  .field-mini-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+.admin-section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px; margin-top: 24px;
+}
+.admin-section-title:first-of-type { margin-top: 0; }
 
-  .btn-add-client {
-    width: 100%; padding: 11px; background: transparent;
-    border: 1.5px dashed var(--border); border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted);
-    cursor: pointer; margin-bottom: 12px; transition: border-color .2s, color .2s;
-  }
-  .btn-add-client:hover { border-color: var(--orange); color: var(--orange); }
+.admin-input {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--mist); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  background: var(--bg); color: var(--text);
+  outline: none; transition: border-color .2s; margin-bottom: 6px;
+}
+.admin-input:focus { border-color: var(--sapphire); background: #fff; }
+.admin-hint { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
 
-  .btn-save {
-    margin-top: 28px; width: 100%; padding: 14px;
-    background: var(--green); color: #fff; border: none; border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: background .2s;
-  }
-  .btn-save:hover { background: #39b55e; }
+.client-block {
+  background: var(--bg); border: 1.5px solid var(--mist);
+  border-radius: 12px; padding: 16px; margin-bottom: 10px;
+}
+.client-block-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.client-block-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.client-remove { font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'DM Sans',sans-serif; }
+.client-remove:hover { color: #b91c1c; }
+.client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .client-grid { grid-template-columns: 1fr; } }
+.field-mini-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
 
-  .save-msg {
-    margin-top: 14px; padding: 10px 14px;
-    background: #edfbf1; border: 1px solid #b3e8c2;
-    border-radius: 8px; font-size: 13px; color: #1e7a3c;
-    display: none; text-align: center;
-  }
-  .save-msg.show { display: block; }
+.btn-add-client {
+  width: 100%; padding: 11px; background: transparent;
+  border: 1.5px dashed var(--mist); border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted);
+  cursor: pointer; margin-bottom: 12px; transition: border-color .2s, color .2s;
+}
+.btn-add-client:hover { border-color: var(--sapphire); color: var(--sapphire); }
 
-  /* ─── DASHBOARD ─── */
-  #dashboard { min-height: 100vh; padding: 0 0 60px; }
+.btn-save {
+  margin-top: 24px; width: 100%; padding: 14px;
+  background: var(--sapphire); color: #fff; border: none; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: background .2s;
+  box-shadow: 0 4px 14px rgba(30,64,175,.25);
+}
+.btn-save:hover { background: var(--sapphire2); }
 
-  .dash-header {
-    background: rgba(255,255,255,.85); backdrop-filter: blur(12px);
-    border-bottom: 1.5px solid var(--border);
-    padding: 18px 32px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    position: sticky; top: 0; z-index: 50;
-  }
-  @media (max-width: 600px) { .dash-header { padding: 14px 18px; flex-wrap: wrap; } }
+.save-msg {
+  margin-top: 12px; padding: 10px 14px;
+  background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: 8px; font-size: 13px; color: #15803d;
+  display: none; text-align: center;
+}
+.save-msg.show { display: block; }
 
-  .dash-logo { display: flex; align-items: center; gap: 12px; }
-  .dash-logo-icon { width: 38px; height: 38px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-  .dash-logo-name { font-size: 16px; font-weight: 700; }
+.loading-cfg {
+  text-align: center; padding: 32px;
+  font-size: 14px; color: var(--muted);
+}
 
-  .dash-meta { display: flex; align-items: center; gap: 12px; }
-  .dash-client-label { font-size: 14px; font-weight: 500; color: var(--muted); }
+/* ── DASHBOARD ── */
+#dashboard { min-height: 100vh; padding: 0 0 60px; }
 
-  .btn-logout {
-    padding: 7px 14px; background: var(--bg);
-    border: 1.5px solid var(--border); border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-    cursor: pointer; color: var(--text); transition: background .2s;
-  }
-  .btn-logout:hover { background: var(--border); }
+.dash-header {
+  background: rgba(255,255,255,.9); backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--mist);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+@media (max-width: 600px) { .dash-header { padding: 14px 18px; } }
 
-  .dash-body { padding: 32px; }
-  @media (max-width: 600px) { .dash-body { padding: 20px; } }
+.dash-logo { display: flex; align-items: center; gap: 10px; }
+.dash-logo-icon {
+  width: 36px; height: 36px; background: var(--sapphire);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+}
+.dash-logo-name { font-size: 16px; font-weight: 700; color: var(--navy); }
 
-  .dash-greeting { margin-bottom: 24px; }
-  .dash-greeting h1 { font-size: 26px; font-weight: 700; }
-  .dash-greeting p  { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.dash-meta { display: flex; align-items: center; gap: 12px; }
+.dash-client-label { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-  /* summary chips */
-  .summary-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
-  .summary-chip {
-    display: flex; align-items: center; gap: 7px;
-    padding: 7px 14px; border-radius: 100px;
-    font-size: 13px; font-weight: 600; border: 1.5px solid transparent;
-  }
-  .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .chip-25  { background: #fff8e0; border-color: #ffe780; color: #7a5c00; }
-  .chip-25  .chip-dot { background: var(--yellow); }
-  .chip-50  { background: #fff2ec; border-color: #ffc9b3; color: #8a3010; }
-  .chip-50  .chip-dot { background: var(--orange); }
-  .chip-75  { background: #ecf5ff; border-color: #b3d6ff; color: #1a4080; }
-  .chip-75  .chip-dot { background: var(--blue); }
-  .chip-100 { background: #edfbf1; border-color: #b3e8c2; color: #1e6e38; }
-  .chip-100 .chip-dot { background: var(--green); }
+.btn-logout {
+  padding: 7px 14px; background: var(--bg);
+  border: 1.5px solid var(--mist); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; color: var(--text); transition: background .2s;
+}
+.btn-logout:hover { background: var(--mist); }
 
-  /* project cards */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 18px;
-  }
-  @media (max-width: 360px) { .projects-grid { grid-template-columns: 1fr; } }
+.dash-body { padding: 32px; }
+@media (max-width: 600px) { .dash-body { padding: 20px; } }
 
-  .project-card {
-    background: var(--surface);
-    border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 24px;
-    box-shadow: 0 2px 12px rgba(28,20,8,.05);
-    animation: fadeUp .45s ease both;
-    transition: box-shadow .2s, transform .2s;
-  }
-  .project-card:hover { box-shadow: 0 6px 28px rgba(28,20,8,.1); transform: translateY(-2px); }
-  .project-card:nth-child(1) { animation-delay: .04s; }
-  .project-card:nth-child(2) { animation-delay: .08s; }
-  .project-card:nth-child(3) { animation-delay: .12s; }
-  .project-card:nth-child(4) { animation-delay: .16s; }
-  .project-card:nth-child(5) { animation-delay: .20s; }
-  .project-card:nth-child(6) { animation-delay: .24s; }
+.dash-greeting { margin-bottom: 28px; }
+.dash-greeting h1 { font-size: 26px; font-weight: 700; color: var(--navy); }
+.dash-greeting p  { font-size: 14px; color: var(--muted); margin-top: 4px; }
 
-  .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 10px; }
-  .card-name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+/* ── SUMMARY CHIPS ── */
+.summary-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+.summary-chip {
+  display: flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 100px;
+  font-size: 13px; font-weight: 600; border: 1.5px solid transparent;
+}
+.chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+.chip-25  { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+.chip-25  .chip-dot { background: #f97316; }
+.chip-50  { background: #fefce8; border-color: #fde047; color: #854d0e; }
+.chip-50  .chip-dot { background: #eab308; }
+.chip-75  { background: var(--ice); border-color: #93c5fd; color: #1e3a8a; }
+.chip-75  .chip-dot { background: var(--sapphire); }
+.chip-100 { background: #f0fdf4; border-color: #86efac; color: #14532d; }
+.chip-100 .chip-dot { background: #22c55e; }
 
-  .status-badge {
-    flex-shrink: 0; padding: 4px 10px; border-radius: 100px;
-    font-size: 12px; font-weight: 700; white-space: nowrap;
-  }
-  .badge-25  { background: #fff8e0; color: #7a5c00; }
-  .badge-50  { background: #fff2ec; color: #8a3010; }
-  .badge-75  { background: #ecf5ff; color: #1a4080; }
-  .badge-100 { background: #edfbf1; color: #1e6e38; }
-  .badge-other { background: var(--bg); color: var(--muted); }
+/* ── PROJECT CARDS ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+@media (max-width: 400px) { .projects-grid { grid-template-columns: 1fr; } }
 
-  .progress-wrap { height: 6px; background: var(--border); border-radius: 100px; margin-bottom: 16px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 100px; transition: width 1s cubic-bezier(.4,0,.2,1); }
-  .fill-25   { background: var(--yellow); }
-  .fill-50   { background: var(--orange); }
-  .fill-75   { background: var(--blue); }
-  .fill-100  { background: var(--green); }
-  .fill-other { background: var(--muted); }
+.project-card {
+  background: var(--surface);
+  border: 1.5px solid var(--mist); border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(30,64,175,.06);
+  animation: fadeUp .45s ease both;
+  transition: box-shadow .2s, transform .2s;
+}
+.project-card:hover { box-shadow: 0 8px 32px rgba(30,64,175,.12); transform: translateY(-2px); }
+.project-card:nth-child(1) { animation-delay: .04s; }
+.project-card:nth-child(2) { animation-delay: .08s; }
+.project-card:nth-child(3) { animation-delay: .12s; }
+.project-card:nth-child(4) { animation-delay: .16s; }
+.project-card:nth-child(5) { animation-delay: .20s; }
+.project-card:nth-child(6) { animation-delay: .24s; }
 
-  .card-dates { display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
-  .date-item  { display: flex; flex-direction: column; gap: 2px; }
-  .date-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
-  .date-val   { font-size: 13px; font-weight: 500; }
+/* card top accent bar */
+.card-accent {
+  height: 5px;
+  background: linear-gradient(90deg, var(--sapphire), var(--sky));
+}
 
-  .card-pic { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-  .pic-avatar {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--yellow); display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #7a5c00;
-  }
-  .pic-name { font-size: 13px; font-weight: 500; }
+.card-body { padding: 22px 22px 0; }
 
-  /* items */
-  .items-section { border-top: 1.5px solid var(--border); padding-top: 14px; }
-  .items-label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .05em; color: var(--muted); margin-bottom: 10px;
-  }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
+.card-name { font-size: 17px; font-weight: 700; color: var(--navy); line-height: 1.3; }
 
-  .item-row { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 7px; overflow: hidden; }
-  .item-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px; cursor: pointer; user-select: none; transition: background .15s;
-  }
-  .item-header:hover { background: var(--border); }
+.status-badge {
+  flex-shrink: 0; padding: 4px 10px; border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+}
+.badge-25  { background: #fff7ed; color: #9a3412; }
+.badge-50  { background: #fefce8; color: #854d0e; }
+.badge-75  { background: var(--ice); color: #1e3a8a; }
+.badge-100 { background: #f0fdf4; color: #14532d; }
+.badge-other { background: var(--mist); color: var(--muted); }
 
-  .item-left { display: flex; align-items: center; gap: 9px; }
-  .item-icon {
-    width: 26px; height: 26px; border-radius: 7px;
-    display: flex; align-items: center; justify-content: center; font-size: 13px;
-  }
-  .icon-neon  { background: #fff8e0; }
-  .icon-huruf { background: #ffeef5; }
-  .icon-other { background: #ecf5ff; }
+/* card meta */
+.card-meta {
+  display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.meta-val   { font-size: 13px; font-weight: 500; color: var(--navy); }
 
-  .item-name { font-size: 14px; font-weight: 600; }
-  .item-chevron { font-size: 11px; color: var(--muted); transition: transform .25s; }
-  .item-row.open .item-chevron { transform: rotate(180deg); }
+.card-pic { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+.pic-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--ice); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--sapphire);
+  border: 1.5px solid #93c5fd;
+}
+.pic-name { font-size: 13px; font-weight: 500; color: var(--navy); }
 
-  .item-detail {
-    padding: 0 14px; max-height: 0; overflow: hidden;
-    transition: max-height .35s ease, padding .3s ease;
-  }
-  .item-row.open .item-detail { max-height: 500px; padding: 0 14px 14px; }
+/* ── NEON BOX PROGRESS BAR ── */
+.neon-progress-wrap { padding: 0 22px 20px; }
 
-  .spec-row {
-    display: flex; gap: 10px; align-items: flex-start;
-    font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border);
-  }
-  .spec-row:last-child { border-bottom: none; }
-  .spec-key { font-weight: 600; color: var(--muted); min-width: 110px; flex-shrink: 0; }
-  .spec-val { color: var(--text); line-height: 1.5; }
+.neon-progress-label {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--muted); margin-bottom: 10px;
+}
 
-  /* state boxes */
-  .state-box {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 64px 20px; text-align: center; gap: 12px;
-  }
-  .state-icon  { font-size: 40px; }
-  .state-title { font-size: 18px; font-weight: 700; }
-  .state-sub   { font-size: 14px; color: var(--muted); max-width: 320px; line-height: 1.6; }
+.neon-bar-outer {
+  position: relative;
+  height: 36px;
+  background: var(--navy);
+  border-radius: 100px;
+  border: 2px solid #1e3a8a;
+  overflow: visible;
+  box-shadow: 0 0 12px rgba(30,64,175,.2), inset 0 2px 4px rgba(0,0,0,.3);
+}
 
-  .spinner {
-    width: 36px; height: 36px; border: 3px solid var(--border);
-    border-top-color: var(--orange); border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
+/* neon tube end caps */
+.neon-bar-outer::before,
+.neon-bar-outer::after {
+  content: '';
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 12px; height: 20px;
+  background: #1e3a8a;
+  border-radius: 3px;
+  z-index: 2;
+}
+.neon-bar-outer::before { left: -2px; border-radius: 6px 2px 2px 6px; }
+.neon-bar-outer::after  { right: -2px; border-radius: 2px 6px 6px 2px; }
 
-  /* animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+.neon-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%; width: 0%;
+  border-radius: 100px;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+/* glow effect inside the bar */
+.neon-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.35) 0%, transparent 60%);
+  border-radius: 100px;
+}
+
+/* milestone dots */
+.neon-milestones {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+.neon-dot {
+  position: absolute;
+  top: 50%; transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  border: 2px solid rgba(255,255,255,.15);
+  z-index: 3;
+  transition: background .5s, border-color .5s, box-shadow .5s;
+}
+.neon-dot.active {
+  background: #fff;
+  border-color: rgba(255,255,255,.8);
+  box-shadow: 0 0 8px rgba(255,255,255,.8);
+}
+.neon-dot[data-pos="25"]  { left: 25%; }
+.neon-dot[data-pos="50"]  { left: 50%; }
+.neon-dot[data-pos="75"]  { left: 75%; }
+.neon-dot[data-pos="100"] { left: 98%; }
+
+/* wrench icon riding the bar */
+.neon-wrench {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  width: 32px; height: 32px;
+  transition: left 1.2s cubic-bezier(.4,0,.2,1);
+  z-index: 10;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.3));
+}
+
+/* pct labels below bar */
+.neon-pct-labels {
+  display: flex; justify-content: space-between;
+  padding: 6px 0 0;
+  position: relative;
+}
+.neon-pct-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-align: center; width: 25%;
+  cursor: pointer; transition: color .2s;
+  user-select: none;
+}
+.neon-pct-label:hover { color: var(--sapphire); }
+.neon-pct-label.reached { color: var(--sapphire); font-weight: 700; }
+
+/* fill colors per status */
+.fill-25  { width: 25%; background: linear-gradient(90deg, #f97316, #fb923c); box-shadow: 0 0 16px rgba(249,115,22,.6), 0 0 32px rgba(249,115,22,.3); }
+.fill-50  { width: 50%; background: linear-gradient(90deg, #eab308, #facc15); box-shadow: 0 0 16px rgba(234,179,8,.6),  0 0 32px rgba(234,179,8,.3); }
+.fill-75  { width: 75%; background: linear-gradient(90deg, var(--sapphire), var(--sky)); box-shadow: 0 0 16px rgba(30,64,175,.7), 0 0 32px rgba(30,64,175,.4); }
+.fill-100 { width: 100%; background: linear-gradient(90deg, #16a34a, #4ade80); box-shadow: 0 0 16px rgba(22,163,74,.6), 0 0 32px rgba(22,163,74,.3); }
+
+/* ── ITEMS SECTION ── */
+.items-section { border-top: 1.5px solid var(--mist); }
+.items-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--muted);
+  padding: 14px 22px 8px;
+}
+
+.item-row { border-bottom: 1px solid var(--mist); }
+.item-row:last-child { border-bottom: none; }
+
+.item-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 22px; cursor: pointer; user-select: none;
+  transition: background .15s;
+}
+.item-header:hover { background: var(--bg); }
+
+.item-left { display: flex; align-items: center; gap: 9px; }
+.item-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; background: var(--ice);
+}
+.item-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.item-chevron { font-size: 11px; color: var(--muted); transition: transform .25s; }
+.item-row.open .item-chevron { transform: rotate(180deg); }
+
+.item-detail {
+  padding: 0 22px; max-height: 0; overflow: hidden;
+  transition: max-height .35s ease, padding .3s ease;
+  background: var(--bg);
+}
+.item-row.open .item-detail { max-height: 500px; padding: 0 22px 14px; }
+
+.spec-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--mist);
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key { font-weight: 600; color: var(--muted); min-width: 110px; flex-shrink: 0; }
+.spec-val { color: var(--navy); line-height: 1.5; }
+
+/* ── STATE BOXES ── */
+.state-box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 64px 20px; text-align: center; gap: 12px;
+}
+.state-icon  { font-size: 40px; }
+.state-title { font-size: 18px; font-weight: 700; color: var(--navy); }
+.state-sub   { font-size: 14px; color: var(--muted); max-width: 320px; line-height: 1.6; }
+
+.spinner {
+  width: 36px; height: 36px; border: 3px solid var(--mist);
+  border-top-color: var(--sapphire); border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes wrenchBounce {
+  0%, 100% { transform: translate(-50%, -60%) rotate(0deg); }
+  25%       { transform: translate(-50%, -68%) rotate(-8deg); }
+  75%       { transform: translate(-50%, -68%) rotate(8deg); }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -367,8 +498,16 @@
 <!-- LOGIN -->
 <div id="loginScreen" class="screen">
   <div class="login-card">
-    <div class="login-logo">🔆</div>
-    <div class="login-title">Cek Progress Project</div>
+    <div class="login-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect x="2" y="10" width="24" height="8" rx="4" fill="#FFF3B0" opacity=".9"/>
+        <rect x="4" y="12" width="6" height="4" rx="1" fill="#1E40AF" opacity=".4"/>
+        <circle cx="14" cy="14" r="2" fill="#FFF3B0"/>
+        <rect x="1" y="12" width="3" height="4" rx="1.5" fill="#DBEAFE"/>
+        <rect x="24" y="12" width="3" height="4" rx="1.5" fill="#DBEAFE"/>
+      </svg>
+    </div>
+    <div class="login-title">Project Tracker</div>
     <div class="login-sub">Masukkan password yang sudah diberikan untuk melihat status project kamu.</div>
     <label class="field-label" for="pwdInput">Password</label>
     <input class="field-input" id="pwdInput" type="password" placeholder="Masukkan password kamu" autocomplete="current-password">
@@ -385,26 +524,9 @@
       <div class="admin-title">Admin Setup</div>
       <button class="btn-back" onclick="showLogin()">Kembali</button>
     </div>
-
-    <div class="admin-section-title">Password Admin</div>
-    <div class="admin-row">
-      <input class="admin-input" id="adminPwd" type="password" placeholder="Buat atau ubah password admin">
-      <div class="admin-hint">Kosongkan jika tidak ingin mengubah password admin saat ini.</div>
+    <div id="adminFormWrap">
+      <div class="loading-cfg">Memuat konfigurasi...</div>
     </div>
-
-    <div class="admin-section-title">Google Sheet</div>
-    <div class="admin-row">
-      <input class="admin-input" id="baseUrl" type="text"
-        placeholder="https://script.google.com/macros/s/XXXX/exec">
-      <div class="admin-hint">URL Apps Script proxy. Sudah terisi otomatis, ubah hanya jika deploy script baru.</div>
-    </div>
-
-    <div class="admin-section-title">Daftar Client</div>
-    <div id="clientList"></div>
-    <button class="btn-add-client" onclick="addClientBlock()">+ Tambah Client</button>
-
-    <button class="btn-save" onclick="saveConfig()">Simpan Konfigurasi</button>
-    <div class="save-msg" id="saveMsg">Konfigurasi berhasil disimpan!</div>
   </div>
 </div>
 
@@ -412,7 +534,15 @@
 <div id="dashboard" class="screen hidden">
   <div class="dash-header">
     <div class="dash-logo">
-      <div class="dash-logo-icon">🔆</div>
+      <div class="dash-logo-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="1" y="7" width="18" height="6" rx="3" fill="#FFF3B0" opacity=".9"/>
+          <rect x="3" y="9" width="4" height="2" rx=".5" fill="#1E40AF" opacity=".5"/>
+          <circle cx="10" cy="10" r="1.5" fill="#FFF3B0"/>
+          <rect x="0" y="9" width="2" height="2" rx="1" fill="#DBEAFE"/>
+          <rect x="18" y="9" width="2" height="2" rx="1" fill="#DBEAFE"/>
+        </svg>
+      </div>
       <div class="dash-logo-name">Project Tracker</div>
     </div>
     <div class="dash-meta">
@@ -431,43 +561,49 @@
 </div>
 
 <script>
-/* ── CONFIG ─────────────────────────────────────────────────────── */
-const CFG_KEY = 'neonbox_cfg_v1';
+const PROXY = 'https://script.google.com/macros/s/AKfycbwXLR_Hf7vABZ2EUPRWTndPcfXzL8LERe5Y_C6od_r7_5Ye4SZDz_HwGwtDaDzeaK51OQ/exec';
 
-function getConfig() {
-  try { return JSON.parse(localStorage.getItem(CFG_KEY)) || { adminPwd:'', baseUrl:'', clients:[] }; }
-  catch(e) { return { adminPwd:'', baseUrl:'', clients:[] }; }
-}
-function setConfig(cfg) { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
-
-/* ── SCREENS ─────────────────────────────────────────────────────── */
+/* ── SCREENS ── */
 function showLogin() {
-  set('loginScreen',''); set('adminPanel','hidden'); set('dashboard','hidden');
+  s('loginScreen',''); s('adminPanel','hidden'); s('dashboard','hidden');
 }
-function showDashboardScreen() {
-  set('loginScreen','hidden'); set('adminPanel','hidden'); set('dashboard','');
+function showDashScreen() {
+  s('loginScreen','hidden'); s('adminPanel','hidden'); s('dashboard','');
 }
 function showAdminScreen() {
-  set('loginScreen','hidden'); set('adminPanel',''); set('dashboard','hidden');
-  renderAdminForm();
+  s('loginScreen','hidden'); s('adminPanel',''); s('dashboard','hidden');
+  loadAdminForm();
 }
-function set(id, cls) {
-  const el = document.getElementById(id);
-  if (cls === 'hidden') el.classList.add('hidden');
-  else el.classList.remove('hidden');
+function s(id, cls) {
+  cls === 'hidden'
+    ? document.getElementById(id).classList.add('hidden')
+    : document.getElementById(id).classList.remove('hidden');
 }
 
-/* ── LOGIN ───────────────────────────────────────────────────────── */
-function doLogin() {
+/* ── LOGIN ── */
+async function doLogin() {
   const pwd = document.getElementById('pwdInput').value.trim();
-  const cfg = getConfig();
-  const client = (cfg.clients || []).find(c => c.password === pwd);
-  if (!client) {
-    document.getElementById('loginError').classList.add('show'); return;
+  if (!pwd) return;
+
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = 'Memeriksa...'; btn.disabled = true;
+
+  try {
+    const cfg = await fetchConfig();
+    const client = (cfg.clients || []).find(c => c.password === pwd);
+    if (!client) {
+      document.getElementById('loginError').classList.add('show');
+      btn.textContent = 'Masuk'; btn.disabled = false;
+      return;
+    }
+    document.getElementById('loginError').classList.remove('show');
+    sessionStorage.setItem('activeClient', JSON.stringify(client));
+    loadDashboard(client);
+  } catch(e) {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginError').textContent = 'Gagal terhubung ke server. Coba lagi.';
+    btn.textContent = 'Masuk'; btn.disabled = false;
   }
-  document.getElementById('loginError').classList.remove('show');
-  sessionStorage.setItem('activeClient', JSON.stringify(client));
-  loadDashboard(client);
 }
 document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
@@ -477,26 +613,67 @@ function doLogout() {
   showLogin();
 }
 
-/* ── ADMIN ───────────────────────────────────────────────────────── */
+/* ── CONFIG (from Google Sheets via Apps Script) ── */
+async function fetchConfig() {
+  const res = await fetch(PROXY + '?action=getConfig');
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch(e) { return { adminPwd:'', clients:[] }; }
+}
+
+async function saveConfigRemote(cfg) {
+  const params = new URLSearchParams({ action: 'saveConfig', config: JSON.stringify(cfg) });
+  const res = await fetch(PROXY + '?' + params.toString());
+  return await res.text();
+}
+
+/* ── ADMIN ── */
+let _cachedCfg = null;
+let _cid = 0;
+
 function showAdmin() {
-  const cfg = getConfig();
-  if (cfg.adminPwd) {
-    const input = prompt('Masukkan password admin:');
-    if (input !== cfg.adminPwd) { alert('Password admin salah.'); return; }
-  }
+  const adminPwd = prompt('Masukkan password admin:');
+  if (adminPwd === null) return;
+  sessionStorage.setItem('pendingAdminPwd', adminPwd);
   showAdminScreen();
 }
 
-let _cid = 0;
+async function loadAdminForm() {
+  document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg">Memuat konfigurasi dari server...</div>';
+  try {
+    const cfg = await fetchConfig();
+    const pendingPwd = sessionStorage.getItem('pendingAdminPwd') || '';
 
-const PROXY_URL = 'https://script.google.com/macros/s/AKfycbwXLR_Hf7vABZ2EUPRWTndPcfXzL8LERe5Y_C6od_r7_5Ye4SZDz_HwGwtDaDzeaK51OQ/exec';
+    if (cfg.adminPwd && cfg.adminPwd !== pendingPwd) {
+      document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg" style="color:#b91c1c">Password admin salah.</div>';
+      setTimeout(showLogin, 1500);
+      return;
+    }
+    _cachedCfg = cfg;
+    renderAdminForm(cfg);
+  } catch(e) {
+    document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg" style="color:#b91c1c">Gagal memuat konfigurasi.</div>';
+  }
+}
 
-function renderAdminForm() {
-  const cfg = getConfig();
-  document.getElementById('baseUrl').value = cfg.baseUrl || PROXY_URL;
-  document.getElementById('adminPwd').value = '';
-  document.getElementById('clientList').innerHTML = '';
+function renderAdminForm(cfg) {
   _cid = 0;
+  document.getElementById('adminFormWrap').innerHTML = `
+    <div class="admin-section-title">Password Admin</div>
+    <input class="admin-input" id="adminPwd" type="password" placeholder="Buat atau ubah password admin">
+    <div class="admin-hint">Kosongkan jika tidak ingin mengubah password admin.</div>
+
+    <div class="admin-section-title">Apps Script URL</div>
+    <input class="admin-input" id="proxyUrl" type="text" value="${esc(PROXY)}">
+    <div class="admin-hint">URL sudah terisi otomatis.</div>
+
+    <div class="admin-section-title">Daftar Client</div>
+    <div id="clientList"></div>
+    <button class="btn-add-client" onclick="addClientBlock()">+ Tambah Client</button>
+
+    <button class="btn-save" onclick="saveConfig()">Simpan Konfigurasi</button>
+    <div class="save-msg" id="saveMsg">Konfigurasi berhasil disimpan!</div>
+  `;
   (cfg.clients || []).forEach(c => addClientBlock(c));
 }
 
@@ -535,12 +712,14 @@ function removeClient(id) {
   if (el) el.remove();
 }
 
-function saveConfig() {
-  const cfg = getConfig();
+async function saveConfig() {
+  const btn = document.querySelector('.btn-save');
+  btn.textContent = 'Menyimpan...'; btn.disabled = true;
+
+  const cfg = { adminPwd: '', clients: [] };
   const newPwd = document.getElementById('adminPwd').value.trim();
-  if (newPwd) cfg.adminPwd = newPwd;
-  cfg.baseUrl = document.getElementById('baseUrl').value.trim();
-  cfg.clients = [];
+  cfg.adminPwd = newPwd || (_cachedCfg ? _cachedCfg.adminPwd : '');
+
   document.querySelectorAll('#clientList .client-block').forEach(b => {
     cfg.clients.push({
       name:     b.querySelector('[data-f="name"]').value.trim(),
@@ -548,15 +727,22 @@ function saveConfig() {
       gid:      b.querySelector('[data-f="gid"]').value.trim(),
     });
   });
-  setConfig(cfg);
-  const msg = document.getElementById('saveMsg');
-  msg.classList.add('show');
-  setTimeout(() => msg.classList.remove('show'), 3000);
+
+  try {
+    await saveConfigRemote(cfg);
+    _cachedCfg = cfg;
+    const msg = document.getElementById('saveMsg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 3000);
+  } catch(e) {
+    alert('Gagal menyimpan. Coba lagi.');
+  }
+  btn.textContent = 'Simpan Konfigurasi'; btn.disabled = false;
 }
 
-/* ── DASHBOARD LOAD ──────────────────────────────────────────────── */
+/* ── DASHBOARD ── */
 async function loadDashboard(client) {
-  showDashboardScreen();
+  showDashScreen();
   document.getElementById('dashClientName').textContent = client.name;
   document.getElementById('dashGreeting').textContent   = `Halo, ${client.name}!`;
   document.getElementById('dashSub').textContent        = 'Berikut status project kamu saat ini.';
@@ -564,21 +750,7 @@ async function loadDashboard(client) {
   document.getElementById('projectsContainer').innerHTML =
     `<div class="state-box"><div class="spinner"></div><div class="state-sub">Memuat data project...</div></div>`;
 
-  const cfg = getConfig();
-  const proxyBase = cfg.baseUrl || '';
-
-  if (!proxyBase) {
-    document.getElementById('projectsContainer').innerHTML = `
-      <div class="state-box">
-        <div class="state-icon">⚙️</div>
-        <div class="state-title">Belum dikonfigurasi</div>
-        <div class="state-sub">Masuk ke Admin Setup dan isi URL Apps Script proxy.</div>
-      </div>`;
-    return;
-  }
-
-  const url = proxyBase + (client.gid ? `?gid=${client.gid}` : '');
-
+  const url = PROXY + (client.gid ? `?gid=${encodeURIComponent(client.gid)}` : '');
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -591,96 +763,91 @@ async function loadDashboard(client) {
       <div class="state-box">
         <div class="state-icon">⚠️</div>
         <div class="state-title">Gagal memuat data</div>
-        <div class="state-sub">Cek koneksi internet atau hubungi admin.<br>
-          <small style="color:#bbb;font-size:11px">${err.message}</small>
-        </div>
+        <div class="state-sub">Cek koneksi atau hubungi admin.<br>
+          <small style="color:#bbb;font-size:11px">${err.message}</small></div>
       </div>`;
   }
 }
 
-/* ── CSV PARSER ──────────────────────────────────────────────────── */
+/* ── CSV PARSER ── */
 function parseCsv(text) {
   const rows = [];
   for (const line of text.split('\n')) {
     if (!line.trim()) continue;
-    const cols = [];
-    let cur = '', inQ = false;
+    const cols = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
-      if (c === '"') {
-        if (inQ && line[i+1] === '"') { cur += '"'; i++; }
-        else inQ = !inQ;
-      } else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      if (c === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
+      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
       else cur += c;
     }
     cols.push(cur.trim());
     rows.push(cols);
   }
   if (rows.length < 2) return [];
-
   const hdr = rows[0].map(h => h.toLowerCase().trim());
   const ci = kws => { const i = hdr.findIndex(h => kws.some(k => h.includes(k))); return i >= 0 ? i : -1; };
-
-  const iProject = ci(['nama project','project name','project']);
-  const iTipe    = ci(['tipe barang','tipe','type','jenis']);
-  const iSpek    = ci(['spesifikasi','spec','detail','keterangan']);
-  const iStatus  = ci(['status']);
-  const iMulai   = ci(['mulai','start','tgl mulai','tanggal mulai']);
-  const iDeadline= ci(['deadline','tgl deadline','selesai','end']);
-  const iPIC     = ci(['pic','penanggung','person in charge']);
-
+  const iP = ci(['nama project','project']), iT = ci(['tipe','type','jenis']),
+        iS = ci(['spesifikasi','spec','detail']), iSt = ci(['status']),
+        iM = ci(['mulai','start']), iD = ci(['deadline','selesai']), iPIC = ci(['pic']);
   const map = {};
   for (let r = 1; r < rows.length; r++) {
     const row = rows[r];
     if (!row.some(c => c)) continue;
-    const name = iProject >= 0 ? row[iProject] : '';
-    if (!name) continue;
-    if (!map[name]) {
-      map[name] = {
-        name,
-        status:   iStatus  >= 0 ? row[iStatus]  : '',
-        tglMulai: iMulai   >= 0 ? row[iMulai]   : '',
-        deadline: iDeadline>= 0 ? row[iDeadline] : '',
-        pic:      iPIC     >= 0 ? row[iPIC]      : '',
-        items: [],
-      };
-    }
-    map[name].items.push({
-      tipe: iTipe >= 0 ? row[iTipe] : '',
-      spek: iSpek >= 0 ? row[iSpek] : '',
-    });
+    const name = iP >= 0 ? row[iP] : ''; if (!name) continue;
+    if (!map[name]) map[name] = {
+      name, status: iSt>=0?row[iSt]:'', tglMulai: iM>=0?row[iM]:'',
+      deadline: iD>=0?row[iD]:'', pic: iPIC>=0?row[iPIC]:'', items: []
+    };
+    map[name].items.push({ tipe: iT>=0?row[iT]:'', spek: iS>=0?row[iS]:'' });
   }
   return Object.values(map);
 }
 
-/* ── RENDER ──────────────────────────────────────────────────────── */
+/* ── RENDER ── */
 function renderProjects(projects) {
   if (!projects.length) {
     document.getElementById('projectsContainer').innerHTML = `
       <div class="state-box">
         <div class="state-icon">📭</div>
         <div class="state-title">Belum ada project</div>
-        <div class="state-sub">Data project akan tampil di sini setelah diisi di Google Sheet.</div>
-      </div>`;
-    return;
+        <div class="state-sub">Data akan tampil setelah diisi di Google Sheet.</div>
+      </div>`; return;
   }
-
-  // Summary chips
-  const cnt = { '25':0,'50':0,'75':0,'100':0 };
-  projects.forEach(p => { const k = pct(p.status); if (cnt[k] !== undefined) cnt[k]++; });
+  const cnt = {'25':0,'50':0,'75':0,'100':0};
+  projects.forEach(p => { const k = pct(p.status); if (cnt[k]!==undefined) cnt[k]++; });
   let chips = '';
   if (cnt['25'])  chips += mkChip('25',  cnt['25']);
   if (cnt['50'])  chips += mkChip('50',  cnt['50']);
   if (cnt['75'])  chips += mkChip('75',  cnt['75']);
   if (cnt['100']) chips += mkChip('100', cnt['100']);
   document.getElementById('summaryBar').innerHTML = chips;
-
-  // Cards
   const grid = document.createElement('div');
   grid.className = 'projects-grid';
   projects.forEach(p => grid.appendChild(buildCard(p)));
   document.getElementById('projectsContainer').innerHTML = '';
   document.getElementById('projectsContainer').appendChild(grid);
+
+  // animate progress bars after DOM insert
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.neon-bar-fill[data-pct]').forEach(fill => {
+      setTimeout(() => {
+        const p = fill.dataset.pct;
+        fill.className = `neon-bar-fill fill-${p}`;
+        // update wrench position
+        const wrench = fill.parentElement.querySelector('.neon-wrench');
+        if (wrench) {
+          const pctMap = {'25':'25%','50':'50%','75':'75%','100':'98%'};
+          wrench.style.left = pctMap[p] || '5%';
+          wrench.style.animation = 'wrenchBounce 1s ease infinite';
+        }
+        // activate milestone dots
+        fill.parentElement.querySelectorAll('.neon-dot').forEach(dot => {
+          if (parseInt(dot.dataset.pos) <= parseInt(p)) dot.classList.add('active');
+        });
+      }, 100);
+    });
+  });
 }
 
 function mkChip(p, n) {
@@ -692,36 +859,33 @@ function pct(status) {
   const s = String(status).replace('%','').trim();
   if (['25','50','75','100'].includes(s)) return s;
   const m = s.match(/\d+/);
-  if (m) { const n = parseInt(m[0]); if (n<=25) return '25'; if (n<=50) return '50'; if (n<=75) return '75'; return '100'; }
+  if (m) { const n = parseInt(m[0]); if(n<=25)return'25'; if(n<=50)return'50'; if(n<=75)return'75'; return'100'; }
   return 'other';
 }
 
 function buildCard(p) {
   const pp  = pct(p.status);
-  const lbl = pp === 'other' ? (p.status || '-') : pp + '%';
-  const w   = pp === 'other' ? 5 : parseInt(pp);
+  const lbl = pp==='other' ? (p.status||'-') : pp+'%';
   const ini = (p.pic||'-').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 
   let itemsHtml = '';
   if (p.items && p.items.length) {
-    const rows = p.items.map((item, i) => {
+    const rows = p.items.map((item,i) => {
       const specs = parseSpek(item.spek);
-      const iconCls = iconClass(item.tipe);
-      const emoji   = iconEmoji(item.tipe);
       return `
-        <div class="item-row" id="ir-${i}-${Date.now()}">
+        <div class="item-row">
           <div class="item-header" onclick="toggleItem(this.parentElement)">
             <div class="item-left">
-              <div class="item-icon ${iconCls}">${emoji}</div>
-              <div class="item-name">${esc(item.tipe || 'Item')}</div>
+              <div class="item-icon">${itemEmoji(item.tipe)}</div>
+              <div class="item-name">${esc(item.tipe||'Item')}</div>
             </div>
             <div class="item-chevron">▾</div>
           </div>
           <div class="item-detail">
-            ${specs.map(s => `
+            ${specs.map(spec=>`
               <div class="spec-row">
-                <span class="spec-key">${esc(s.key)}</span>
-                <span class="spec-val">${esc(s.val)}</span>
+                <span class="spec-key">${esc(spec.key)}</span>
+                <span class="spec-val">${esc(spec.val)}</span>
               </div>`).join('')}
           </div>
         </div>`;
@@ -732,39 +896,71 @@ function buildCard(p) {
   const card = document.createElement('div');
   card.className = 'project-card';
   card.innerHTML = `
-    <div class="card-top">
-      <div class="card-name">${esc(p.name)}</div>
-      <div class="status-badge badge-${pp}">${lbl}</div>
+    <div class="card-accent"></div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-name">${esc(p.name)}</div>
+        <div class="status-badge badge-${pp}">${lbl}</div>
+      </div>
+      <div class="card-meta">
+        <div class="meta-item"><span class="meta-label">Mulai</span><span class="meta-val">${esc(p.tglMulai||'-')}</span></div>
+        <div class="meta-item"><span class="meta-label">Deadline</span><span class="meta-val">${esc(p.deadline||'-')}</span></div>
+      </div>
+      <div class="card-pic">
+        <div class="pic-avatar">${ini}</div>
+        <div class="pic-name">${esc(p.pic||'-')}</div>
+      </div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-fill fill-${pp}" style="width:0%" data-target="${w}"></div>
-    </div>
-    <div class="card-dates">
-      <div class="date-item"><span class="date-label">Mulai</span><span class="date-val">${esc(p.tglMulai||'-')}</span></div>
-      <div class="date-item"><span class="date-label">Deadline</span><span class="date-val">${esc(p.deadline||'-')}</span></div>
-    </div>
-    <div class="card-pic">
-      <div class="pic-avatar">${ini}</div>
-      <div class="pic-name">${esc(p.pic||'-')}</div>
+
+    <div class="neon-progress-wrap">
+      <div class="neon-progress-label">Progress Pengerjaan</div>
+      <div class="neon-bar-outer">
+        <div class="neon-bar-fill" data-pct="${pp}" style="width:0%"></div>
+        <div class="neon-milestones">
+          <div class="neon-dot" data-pos="25"></div>
+          <div class="neon-dot" data-pos="50"></div>
+          <div class="neon-dot" data-pos="75"></div>
+          <div class="neon-dot" data-pos="100"></div>
+        </div>
+        <svg class="neon-wrench" style="left:2%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- wrench body -->
+          <path d="M20 4C16.5 4 13.5 6.5 13 10L6 18C5 19 5 21 6 22L10 26C11 27 13 27 14 26L22 19C25.5 18.5 28 15.5 28 12C28 7.6 24.4 4 20 4Z" fill="#FFF3B0" stroke="#1E40AF" stroke-width="1.5"/>
+          <!-- wrench hole -->
+          <circle cx="20" cy="11" r="2.5" fill="#1E40AF"/>
+          <!-- handle -->
+          <rect x="4" y="20" width="10" height="4" rx="2" transform="rotate(-45 4 20)" fill="#DBEAFE" stroke="#1E40AF" stroke-width="1"/>
+          <!-- sparkle -->
+          <circle cx="26" cy="6" r="1.5" fill="#FFE082" opacity=".8"/>
+          <circle cx="24" cy="4" r="1"   fill="#FFE082" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="neon-pct-labels">
+        <div class="neon-pct-label ${parseInt(pp)>=25?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','25')">25%<br><span style="font-size:10px;font-weight:400">Perencanaan</span></div>
+        <div class="neon-pct-label ${parseInt(pp)>=50?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','50')">50%<br><span style="font-size:10px;font-weight:400">Produksi</span></div>
+        <div class="neon-pct-label ${parseInt(pp)>=75?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','75')">75%<br><span style="font-size:10px;font-weight:400">Finishing</span></div>
+        <div class="neon-pct-label ${parseInt(pp)>=100?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','100')">100%<br><span style="font-size:10px;font-weight:400">Selesai</span></div>
+      </div>
     </div>
     ${itemsHtml}
   `;
-
-  // Animate progress bar after insertion
-  requestAnimationFrame(() => {
-    const fill = card.querySelector('.progress-fill');
-    if (fill) setTimeout(() => fill.style.width = fill.dataset.target + '%', 80);
-  });
   return card;
 }
 
-function iconClass(t) {
-  const s = (t||'').toLowerCase();
-  if (s.includes('neon'))  return 'icon-neon';
-  if (s.includes('huruf')) return 'icon-huruf';
-  return 'icon-other';
+/* milestone info popup */
+const MILESTONE_INFO = {
+  '25':  { label: 'Perencanaan', desc: 'Desain sudah disetujui, bahan sudah dipesan, jadwal produksi sudah ditentukan.' },
+  '50':  { label: 'Produksi',    desc: 'Proses produksi sedang berjalan. Pemotongan, perakitan, dan pemasangan komponen.' },
+  '75':  { label: 'Finishing',   desc: 'Produksi selesai. Proses pengecatan, pemasangan kabel, dan quality check.' },
+  '100': { label: 'Selesai',     desc: 'Project sudah selesai dan siap untuk pengiriman atau pemasangan.' },
+};
+
+function showMilestoneInfo(projectName, pctKey) {
+  const info = MILESTONE_INFO[pctKey];
+  if (!info) return;
+  alert(`${projectName}\n\n${pctKey}% - ${info.label}\n${info.desc}`);
 }
-function iconEmoji(t) {
+
+function itemEmoji(t) {
   const s = (t||'').toLowerCase();
   if (s.includes('neon'))  return '💡';
   if (s.includes('huruf')) return '🔤';
@@ -772,34 +968,24 @@ function iconEmoji(t) {
 }
 
 function parseSpek(spek) {
-  if (!spek) return [{ key:'Detail', val:'-' }];
-  // Try semicolon key:val
+  if (!spek) return [{key:'Detail',val:'-'}];
   const sp = spek.split(';').map(s=>s.trim()).filter(Boolean);
-  if (sp.some(s=>s.includes(':'))) {
-    return sp.map(s => { const i=s.indexOf(':'); return { key:s.slice(0,i).trim(), val:s.slice(i+1).trim() }; });
-  }
-  // Try comma key:val
+  if (sp.some(s=>s.includes(':'))) return sp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()};});
   const cp = spek.split(',').map(s=>s.trim()).filter(Boolean);
-  if (cp.some(s=>s.includes(':'))) {
-    return cp.map(s => { const i=s.indexOf(':'); return { key:s.slice(0,i).trim(), val:s.slice(i+1).trim() }; });
-  }
-  return [{ key:'Detail', val:spek }];
+  if (cp.some(s=>s.includes(':'))) return cp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()};});
+  return [{key:'Detail',val:spek}];
 }
 
 function toggleItem(row) { row.classList.toggle('open'); }
 
 function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── INIT ────────────────────────────────────────────────────────── */
+/* ── INIT ── */
 (function init() {
   const saved = sessionStorage.getItem('activeClient');
-  if (saved) {
-    try { loadDashboard(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('activeClient'); }
-  }
+  if (saved) { try { loadDashboard(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('activeClient'); } }
   showLogin();
 })();
 </script>
