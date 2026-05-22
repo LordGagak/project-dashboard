@@ -216,6 +216,14 @@ body {
   cursor: pointer; color: var(--text); transition: background .2s;
 }
 .btn-logout:hover { background: var(--mist); }
+.btn-refresh {
+  padding: 7px 14px; background: var(--ice);
+  border: 1.5px solid #93c5fd; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; color: var(--sapphire); transition: background .2s;
+}
+.btn-refresh:hover { background: #bfdbfe; }
+.btn-refresh.spinning { animation: spin .7s linear infinite; display: inline-block; }
 
 .dash-body { padding: 32px; }
 @media (max-width: 600px) { .dash-body { padding: 20px; } }
@@ -547,6 +555,7 @@ body {
     </div>
     <div class="dash-meta">
       <span class="dash-client-label" id="dashClientName"></span>
+      <button class="btn-refresh" onclick="refreshDashboard()" id="btnRefresh">↻ Refresh</button>
       <button class="btn-logout" onclick="doLogout()">Keluar</button>
     </div>
   </div>
@@ -606,6 +615,17 @@ async function doLogin() {
   }
 }
 document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function refreshDashboard() {
+  const saved = sessionStorage.getItem('activeClient');
+  if (!saved) return;
+  const btn = document.getElementById('btnRefresh');
+  btn.textContent = '↻';
+  btn.style.animation = 'spin .7s linear infinite';
+  btn.disabled = true;
+  try { loadDashboard(JSON.parse(saved)); } catch(e) {}
+  setTimeout(() => { btn.textContent = '↻ Refresh'; btn.style.animation = ''; btn.disabled = false; }, 2000);
+}
 
 function doLogout() {
   sessionStorage.removeItem('activeClient');
