@@ -13,486 +13,272 @@
   --lemon:     #FFF3B0;
   --navy:      #0F172A;
   --sky:       #7DD3FC;
-  --yellow:    #FFE082;
-  --slate:     #64748B;
   --mist:      #E2E8F0;
   --bg:        #F0F6FF;
   --surface:   #FFFFFF;
-  --text:      #0F172A;
   --muted:     #64748B;
-  --radius:    16px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--navy);min-height:100vh}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:.1}
+.blob-1{width:600px;height:600px;background:var(--sapphire);top:-160px;left:-160px}
+.blob-2{width:400px;height:400px;background:var(--sky);top:50%;right:-100px}
+.blob-3{width:350px;height:350px;background:var(--lemon);bottom:-80px;left:30%}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-/* BLOBS */
-.blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.blob  { position: absolute; border-radius: 50%; filter: blur(100px); opacity: .12; }
-.blob-1 { width: 600px; height: 600px; background: var(--sapphire); top: -160px; left: -160px; }
-.blob-2 { width: 400px; height: 400px; background: var(--sky);      top: 50%; right: -100px; }
-.blob-3 { width: 350px; height: 350px; background: var(--lemon);    bottom: -80px; left: 30%; }
-
-.screen { position: relative; z-index: 1; }
-.hidden { display: none !important; }
+.screen{position:relative;z-index:1}
+.hidden{display:none!important}
 
 /* ── LOGIN ── */
-#loginScreen {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 40px 20px;
-}
-
-.login-card {
-  width: 100%; max-width: 420px;
-  background: var(--surface);
-  border: 1.5px solid var(--mist);
-  border-radius: 24px;
-  padding: 48px 40px 40px;
-  box-shadow: 0 8px 48px rgba(30,64,175,.1);
-  animation: fadeUp .45s ease both;
-}
-@media (max-width: 480px) { .login-card { padding: 32px 22px 28px; } }
-
-.login-logo {
-  width: 56px; height: 56px;
-  background: var(--sapphire);
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(30,64,175,.3);
-}
-
-.login-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
-.login-sub   { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
-
-.field-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; color: var(--navy); }
-.field-input {
-  width: 100%; padding: 12px 16px;
-  border: 1.5px solid var(--mist); border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px;
-  background: var(--bg); color: var(--text);
-  outline: none; transition: border-color .2s, box-shadow .2s;
-  margin-bottom: 20px;
-}
-.field-input:focus { border-color: var(--sapphire); box-shadow: 0 0 0 3px rgba(30,64,175,.1); background: #fff; }
-
-.btn-primary {
-  width: 100%; padding: 14px;
-  background: var(--sapphire); color: #fff;
-  border: none; border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: background .2s, transform .1s;
-  box-shadow: 0 4px 14px rgba(30,64,175,.3);
-}
-.btn-primary:hover  { background: var(--sapphire2); }
-.btn-primary:active { transform: scale(.98); }
-
-.login-error {
-  margin-top: 14px; padding: 10px 14px;
-  background: #fef2f2; border: 1px solid #fecaca;
-  border-radius: 8px; font-size: 13px; color: #b91c1c; display: none;
-}
-.login-error.show { display: block; }
-
-.admin-link { margin-top: 24px; text-align: center; font-size: 12px; color: var(--muted); }
-.admin-link a { color: var(--muted); text-decoration: underline; cursor: pointer; }
-.admin-link a:hover { color: var(--sapphire); }
+#loginScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.login-card{width:100%;max-width:420px;background:var(--surface);border:1.5px solid var(--mist);border-radius:24px;padding:48px 40px 40px;box-shadow:0 8px 48px rgba(30,64,175,.1);animation:fadeUp .45s ease both}
+@media(max-width:480px){.login-card{padding:32px 22px 28px}}
+.login-logo{width:56px;height:56px;background:var(--sapphire);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 4px 16px rgba(30,64,175,.3)}
+.login-title{font-size:24px;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.5}
+.field-label{font-size:13px;font-weight:600;margin-bottom:8px;display:block}
+.field-input{width:100%;padding:12px 16px;border:1.5px solid var(--mist);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--navy);outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:20px}
+.field-input:focus{border-color:var(--sapphire);box-shadow:0 0 0 3px rgba(30,64,175,.1);background:#fff}
+.btn-primary{width:100%;padding:14px;background:var(--sapphire);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;box-shadow:0 4px 14px rgba(30,64,175,.3)}
+.btn-primary:hover{background:var(--sapphire2)}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.login-error{margin-top:14px;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:13px;color:#b91c1c;display:none}
+.login-error.show{display:block}
+.admin-link{margin-top:24px;text-align:center;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--muted);text-decoration:underline;cursor:pointer}
+.admin-link a:hover{color:var(--sapphire)}
 
 /* ── ADMIN ── */
-#adminPanel { min-height: 100vh; padding: 40px 20px 60px; display: flex; flex-direction: column; align-items: center; }
-.admin-card {
-  width: 100%; max-width: 680px;
-  background: var(--surface); border: 1.5px solid var(--mist);
-  border-radius: 24px; padding: 40px;
-  box-shadow: 0 8px 48px rgba(30,64,175,.08);
-  animation: fadeUp .4s ease both;
-}
-@media (max-width: 480px) { .admin-card { padding: 24px 18px; } }
-
-.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-.admin-title  { font-size: 20px; font-weight: 700; color: var(--navy); }
-
-.btn-back {
-  padding: 8px 16px; background: var(--bg);
-  border: 1.5px solid var(--mist); border-radius: 8px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-  cursor: pointer; color: var(--text); transition: background .2s;
-}
-.btn-back:hover { background: var(--mist); }
-
-.admin-section-title {
-  font-size: 11px; font-weight: 700; letter-spacing: .07em;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 10px; margin-top: 24px;
-}
-.admin-section-title:first-of-type { margin-top: 0; }
-
-.admin-input {
-  width: 100%; padding: 11px 14px;
-  border: 1.5px solid var(--mist); border-radius: 9px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px;
-  background: var(--bg); color: var(--text);
-  outline: none; transition: border-color .2s; margin-bottom: 6px;
-}
-.admin-input:focus { border-color: var(--sapphire); background: #fff; }
-.admin-hint { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-
-.client-block {
-  background: var(--bg); border: 1.5px solid var(--mist);
-  border-radius: 12px; padding: 16px; margin-bottom: 10px;
-}
-.client-block-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.client-block-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.client-remove { font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'DM Sans',sans-serif; }
-.client-remove:hover { color: #b91c1c; }
-.client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-@media (max-width: 480px) { .client-grid { grid-template-columns: 1fr; } }
-.field-mini-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
-
-.btn-add-client {
-  width: 100%; padding: 11px; background: transparent;
-  border: 1.5px dashed var(--mist); border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted);
-  cursor: pointer; margin-bottom: 12px; transition: border-color .2s, color .2s;
-}
-.btn-add-client:hover { border-color: var(--sapphire); color: var(--sapphire); }
-
-.btn-save {
-  margin-top: 24px; width: 100%; padding: 14px;
-  background: var(--sapphire); color: #fff; border: none; border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: background .2s;
-  box-shadow: 0 4px 14px rgba(30,64,175,.25);
-}
-.btn-save:hover { background: var(--sapphire2); }
-
-.save-msg {
-  margin-top: 12px; padding: 10px 14px;
-  background: #f0fdf4; border: 1px solid #bbf7d0;
-  border-radius: 8px; font-size: 13px; color: #15803d;
-  display: none; text-align: center;
-}
-.save-msg.show { display: block; }
-
-.loading-cfg {
-  text-align: center; padding: 32px;
-  font-size: 14px; color: var(--muted);
-}
+#adminPanel{min-height:100vh;padding:40px 20px 60px;display:flex;flex-direction:column;align-items:center}
+.admin-card{width:100%;max-width:680px;background:var(--surface);border:1.5px solid var(--mist);border-radius:24px;padding:40px;box-shadow:0 8px 48px rgba(30,64,175,.08);animation:fadeUp .4s ease both}
+@media(max-width:480px){.admin-card{padding:24px 18px}}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.admin-title{font-size:20px;font-weight:700}
+.btn-back{padding:8px 16px;background:var(--bg);border:1.5px solid var(--mist);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--navy);transition:background .2s}
+.btn-back:hover{background:var(--mist)}
+.admin-section-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:24px}
+.admin-section-title:first-of-type{margin-top:0}
+.admin-input{width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--navy);outline:none;transition:border-color .2s;margin-bottom:6px}
+.admin-input:focus{border-color:var(--sapphire);background:#fff}
+.admin-hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+.client-block{background:var(--bg);border:1.5px solid var(--mist);border-radius:12px;padding:16px;margin-bottom:10px}
+.client-block-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.client-block-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.client-remove{font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+.client-remove:hover{color:#b91c1c}
+.client-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.client-grid{grid-template-columns:1fr}}
+.field-mini-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.btn-add-client{width:100%;padding:11px;background:transparent;border:1.5px dashed var(--mist);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);cursor:pointer;margin-bottom:12px;transition:border-color .2s,color .2s}
+.btn-add-client:hover{border-color:var(--sapphire);color:var(--sapphire)}
+.btn-save{margin-top:24px;width:100%;padding:14px;background:var(--sapphire);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s;box-shadow:0 4px 14px rgba(30,64,175,.25)}
+.btn-save:hover{background:var(--sapphire2)}
+.btn-save:disabled{opacity:.6;cursor:not-allowed}
+.save-msg{margin-top:12px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:13px;color:#15803d;display:none;text-align:center}
+.save-msg.show{display:block}
+.loading-cfg{text-align:center;padding:32px;font-size:14px;color:var(--muted)}
 
 /* ── DASHBOARD ── */
-#dashboard { min-height: 100vh; padding: 0 0 60px; }
+#dashboard{min-height:100vh;padding:0 0 60px}
+.dash-header{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--mist);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+@media(max-width:600px){.dash-header{padding:14px 18px;flex-wrap:wrap;gap:8px}}
+.dash-logo{display:flex;align-items:center;gap:10px}
+.dash-logo-icon{width:36px;height:36px;background:var(--sapphire);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.dash-logo-name{font-size:16px;font-weight:700}
+.dash-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dash-client-label{font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{padding:7px 14px;background:var(--bg);border:1.5px solid var(--mist);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--navy);transition:background .2s}
+.btn-logout:hover{background:var(--mist)}
+.btn-refresh{padding:7px 14px;background:var(--ice);border:1.5px solid #93c5fd;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--sapphire);transition:background .2s}
+.btn-refresh:hover{background:#bfdbfe}
+.btn-refresh:disabled{opacity:.5;cursor:not-allowed}
 
-.dash-header {
-  background: rgba(255,255,255,.9); backdrop-filter: blur(12px);
-  border-bottom: 1.5px solid var(--mist);
-  padding: 16px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 50;
-}
-@media (max-width: 600px) { .dash-header { padding: 14px 18px; } }
+.dash-body{padding:32px}
+@media(max-width:600px){.dash-body{padding:20px}}
+.dash-greeting{margin-bottom:28px}
+.dash-greeting h1{font-size:26px;font-weight:700}
+.dash-greeting p{font-size:14px;color:var(--muted);margin-top:4px}
 
-.dash-logo { display: flex; align-items: center; gap: 10px; }
-.dash-logo-icon {
-  width: 36px; height: 36px; background: var(--sapphire);
-  border-radius: 10px; display: flex; align-items: center; justify-content: center;
-}
-.dash-logo-name { font-size: 16px; font-weight: 700; color: var(--navy); }
-
-.dash-meta { display: flex; align-items: center; gap: 12px; }
-.dash-client-label { font-size: 14px; color: var(--muted); font-weight: 500; }
-
-.btn-logout {
-  padding: 7px 14px; background: var(--bg);
-  border: 1.5px solid var(--mist); border-radius: 8px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-  cursor: pointer; color: var(--text); transition: background .2s;
-}
-.btn-logout:hover { background: var(--mist); }
-.btn-refresh {
-  padding: 7px 14px; background: var(--ice);
-  border: 1.5px solid #93c5fd; border-radius: 8px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
-  cursor: pointer; color: var(--sapphire); transition: background .2s;
-}
-.btn-refresh:hover { background: #bfdbfe; }
-.btn-refresh.spinning { animation: spin .7s linear infinite; display: inline-block; }
-
-.dash-body { padding: 32px; }
-@media (max-width: 600px) { .dash-body { padding: 20px; } }
-
-.dash-greeting { margin-bottom: 28px; }
-.dash-greeting h1 { font-size: 26px; font-weight: 700; color: var(--navy); }
-.dash-greeting p  { font-size: 14px; color: var(--muted); margin-top: 4px; }
-
-/* ── SUMMARY CHIPS ── */
-.summary-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
-.summary-chip {
-  display: flex; align-items: center; gap: 7px;
-  padding: 7px 14px; border-radius: 100px;
-  font-size: 13px; font-weight: 600; border: 1.5px solid transparent;
-}
-.chip-dot { width: 8px; height: 8px; border-radius: 50%; }
-.chip-25  { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
-.chip-25  .chip-dot { background: #f97316; }
-.chip-50  { background: #fefce8; border-color: #fde047; color: #854d0e; }
-.chip-50  .chip-dot { background: #eab308; }
-.chip-75  { background: var(--ice); border-color: #93c5fd; color: #1e3a8a; }
-.chip-75  .chip-dot { background: var(--sapphire); }
-.chip-100 { background: #f0fdf4; border-color: #86efac; color: #14532d; }
-.chip-100 .chip-dot { background: #22c55e; }
+.summary-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.summary-chip{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid transparent}
+.chip-dot{width:8px;height:8px;border-radius:50%}
+.chip-25{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.chip-25 .chip-dot{background:#f97316}
+.chip-50{background:#fefce8;border-color:#fde047;color:#854d0e}.chip-50 .chip-dot{background:#eab308}
+.chip-75{background:var(--ice);border-color:#93c5fd;color:#1e3a8a}.chip-75 .chip-dot{background:var(--sapphire)}
+.chip-100{background:#f0fdf4;border-color:#86efac;color:#14532d}.chip-100 .chip-dot{background:#22c55e}
 
 /* ── PROJECT CARDS ── */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
-}
-@media (max-width: 400px) { .projects-grid { grid-template-columns: 1fr; } }
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+@media(max-width:400px){.projects-grid{grid-template-columns:1fr}}
+.project-card{background:var(--surface);border:1.5px solid var(--mist);border-radius:20px;overflow:hidden;box-shadow:0 2px 16px rgba(30,64,175,.06);animation:fadeUp .45s ease both;transition:box-shadow .2s,transform .2s}
+.project-card:hover{box-shadow:0 8px 32px rgba(30,64,175,.13);transform:translateY(-2px)}
+.project-card:nth-child(1){animation-delay:.04s}
+.project-card:nth-child(2){animation-delay:.08s}
+.project-card:nth-child(3){animation-delay:.12s}
+.project-card:nth-child(4){animation-delay:.16s}
+.project-card:nth-child(5){animation-delay:.20s}
+.project-card:nth-child(6){animation-delay:.24s}
 
-.project-card {
-  background: var(--surface);
-  border: 1.5px solid var(--mist); border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 2px 16px rgba(30,64,175,.06);
-  animation: fadeUp .45s ease both;
-  transition: box-shadow .2s, transform .2s;
-}
-.project-card:hover { box-shadow: 0 8px 32px rgba(30,64,175,.12); transform: translateY(-2px); }
-.project-card:nth-child(1) { animation-delay: .04s; }
-.project-card:nth-child(2) { animation-delay: .08s; }
-.project-card:nth-child(3) { animation-delay: .12s; }
-.project-card:nth-child(4) { animation-delay: .16s; }
-.project-card:nth-child(5) { animation-delay: .20s; }
-.project-card:nth-child(6) { animation-delay: .24s; }
+.card-accent{height:5px;background:linear-gradient(90deg,var(--sapphire),var(--sky))}
+.card-body{padding:22px 22px 16px}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px}
+.card-name{font-size:17px;font-weight:700;line-height:1.3}
+.status-badge{flex-shrink:0;padding:4px 10px;border-radius:100px;font-size:12px;font-weight:700}
+.badge-25{background:#fff7ed;color:#9a3412}
+.badge-50{background:#fefce8;color:#854d0e}
+.badge-75{background:var(--ice);color:#1e3a8a}
+.badge-100{background:#f0fdf4;color:#14532d}
+.badge-other{background:var(--mist);color:var(--muted)}
 
-/* card top accent bar */
-.card-accent {
-  height: 5px;
-  background: linear-gradient(90deg, var(--sapphire), var(--sky));
-}
+.card-meta{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.meta-val{font-size:13px;font-weight:500}
+.card-pic{display:flex;align-items:center;gap:8px}
+.pic-avatar{width:28px;height:28px;border-radius:50%;background:var(--ice);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sapphire);border:1.5px solid #93c5fd}
+.pic-name{font-size:13px;font-weight:500}
 
-.card-body { padding: 22px 22px 0; }
+/* ── NEON TUBE PROGRESS ── */
+.neon-section{padding:16px 22px 20px;background:#0a0f1e;border-top:1px solid #1e2a4a}
 
-.card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
-.card-name { font-size: 17px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+.neon-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4a6fa5;margin-bottom:14px}
 
-.status-badge {
-  flex-shrink: 0; padding: 4px 10px; border-radius: 100px;
-  font-size: 12px; font-weight: 700;
-}
-.badge-25  { background: #fff7ed; color: #9a3412; }
-.badge-50  { background: #fefce8; color: #854d0e; }
-.badge-75  { background: var(--ice); color: #1e3a8a; }
-.badge-100 { background: #f0fdf4; color: #14532d; }
-.badge-other { background: var(--mist); color: var(--muted); }
+/* the tube container */
+.neon-tube-wrap{position:relative;margin-bottom:8px}
 
-/* card meta */
-.card-meta {
-  display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
-}
-.meta-item { display: flex; flex-direction: column; gap: 2px; }
-.meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
-.meta-val   { font-size: 13px; font-weight: 500; color: var(--navy); }
-
-.card-pic { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-.pic-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--ice); display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--sapphire);
-  border: 1.5px solid #93c5fd;
-}
-.pic-name { font-size: 13px; font-weight: 500; color: var(--navy); }
-
-/* ── NEON BOX PROGRESS BAR ── */
-.neon-progress-wrap { padding: 0 22px 20px; }
-
-.neon-progress-label {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .05em; color: var(--muted); margin-bottom: 10px;
+/* dark background tube (the glass) */
+.neon-tube{
+  position:relative;
+  height:28px;
+  background:#050810;
+  border-radius:100px;
+  border:2px solid #1a2744;
+  overflow:hidden;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.8), inset 0 -1px 3px rgba(255,255,255,.03);
 }
 
-.neon-bar-outer {
-  position: relative;
-  height: 36px;
-  background: var(--navy);
-  border-radius: 100px;
-  border: 2px solid #1e3a8a;
-  overflow: visible;
-  box-shadow: 0 0 12px rgba(30,64,175,.2), inset 0 2px 4px rgba(0,0,0,.3);
+/* end caps - connector pins */
+.neon-tube::before,.neon-tube::after{
+  content:'';position:absolute;top:50%;transform:translateY(-50%);
+  width:8px;height:16px;z-index:5;border-radius:3px;
+}
+.neon-tube::before{left:-6px;background:linear-gradient(180deg,#2a3f6e,#1a2744);border:1px solid #2a3f6e}
+.neon-tube::after{right:-6px;background:linear-gradient(180deg,#2a3f6e,#1a2744);border:1px solid #2a3f6e}
+
+/* the glowing light fill */
+.neon-fill{
+  position:absolute;top:0;left:0;height:100%;
+  width:0%;
+  border-radius:100px;
+  transition:width 1.4s cubic-bezier(.4,0,.2,1);
 }
 
-/* neon tube end caps */
-.neon-bar-outer::before,
-.neon-bar-outer::after {
-  content: '';
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  width: 12px; height: 20px;
-  background: #1e3a8a;
-  border-radius: 3px;
-  z-index: 2;
-}
-.neon-bar-outer::before { left: -2px; border-radius: 6px 2px 2px 6px; }
-.neon-bar-outer::after  { right: -2px; border-radius: 2px 6px 6px 2px; }
-
-.neon-bar-fill {
-  position: absolute;
-  top: 0; left: 0;
-  height: 100%; width: 0%;
-  border-radius: 100px;
-  transition: width 1.2s cubic-bezier(.4,0,.2,1);
-  overflow: hidden;
+/* glass glare overlay */
+.neon-glare{
+  position:absolute;top:1px;left:2%;width:96%;height:35%;
+  border-radius:100px;
+  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,transparent 100%);
+  pointer-events:none;z-index:4;
 }
 
-/* glow effect inside the bar */
-.neon-bar-fill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,.35) 0%, transparent 60%);
-  border-radius: 100px;
+/* pct colors with glow */
+.neon-fill.pct-25{
+  background:linear-gradient(90deg,#ea580c,#f97316,#fb923c);
+  box-shadow:0 0 10px #f97316, 0 0 20px #f97316, 0 0 40px rgba(249,115,22,.5), inset 0 0 12px rgba(255,200,100,.3);
+}
+.neon-fill.pct-50{
+  background:linear-gradient(90deg,#ca8a04,#eab308,#facc15);
+  box-shadow:0 0 10px #eab308, 0 0 20px #eab308, 0 0 40px rgba(234,179,8,.5), inset 0 0 12px rgba(255,240,100,.3);
+}
+.neon-fill.pct-75{
+  background:linear-gradient(90deg,#1d4ed8,#3b82f6,#60a5fa);
+  box-shadow:0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 40px rgba(59,130,246,.6), inset 0 0 12px rgba(150,200,255,.3);
+}
+.neon-fill.pct-100{
+  background:linear-gradient(90deg,#15803d,#22c55e,#4ade80);
+  box-shadow:0 0 10px #22c55e, 0 0 20px #22c55e, 0 0 40px rgba(34,197,94,.5), inset 0 0 12px rgba(100,255,150,.3);
 }
 
-/* milestone dots */
-.neon-milestones {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-.neon-dot {
-  position: absolute;
-  top: 50%; transform: translate(-50%, -50%);
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.2);
-  border: 2px solid rgba(255,255,255,.15);
-  z-index: 3;
-  transition: background .5s, border-color .5s, box-shadow .5s;
-}
-.neon-dot.active {
-  background: #fff;
-  border-color: rgba(255,255,255,.8);
-  box-shadow: 0 0 8px rgba(255,255,255,.8);
-}
-.neon-dot[data-pos="25"]  { left: 25%; }
-.neon-dot[data-pos="50"]  { left: 50%; }
-.neon-dot[data-pos="75"]  { left: 75%; }
-.neon-dot[data-pos="100"] { left: 98%; }
+/* outer glow on the tube when lit */
+.neon-tube.lit-25  {box-shadow:inset 0 2px 8px rgba(0,0,0,.8),0 0 8px rgba(249,115,22,.4),0 0 16px rgba(249,115,22,.2)}
+.neon-tube.lit-50  {box-shadow:inset 0 2px 8px rgba(0,0,0,.8),0 0 8px rgba(234,179,8,.4),0 0 16px rgba(234,179,8,.2)}
+.neon-tube.lit-75  {box-shadow:inset 0 2px 8px rgba(0,0,0,.8),0 0 8px rgba(59,130,246,.5),0 0 16px rgba(59,130,246,.25)}
+.neon-tube.lit-100 {box-shadow:inset 0 2px 8px rgba(0,0,0,.8),0 0 8px rgba(34,197,94,.4),0 0 16px rgba(34,197,94,.2)}
 
-/* wrench icon riding the bar */
-.neon-wrench {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -60%);
-  width: 32px; height: 32px;
-  transition: left 1.2s cubic-bezier(.4,0,.2,1);
-  z-index: 10;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.3));
+/* wrench icon on tube */
+.neon-wrench-icon{
+  position:absolute;top:-18px;
+  transform:translateX(-50%);
+  font-size:18px;
+  transition:left 1.4s cubic-bezier(.4,0,.2,1);
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));
+  z-index:10;
+  animation:wrenchBob 2s ease-in-out infinite;
 }
 
-/* pct labels below bar */
-.neon-pct-labels {
-  display: flex; justify-content: space-between;
-  padding: 6px 0 0;
-  position: relative;
+/* milestone markers */
+.neon-markers{position:absolute;inset:0;pointer-events:none;z-index:3}
+.neon-marker{
+  position:absolute;top:0;height:100%;
+  width:2px;background:rgba(255,255,255,.08);
 }
-.neon-pct-label {
-  font-size: 11px; font-weight: 600; color: var(--muted);
-  text-align: center; width: 25%;
-  cursor: pointer; transition: color .2s;
-  user-select: none;
+.neon-marker::after{
+  content:attr(data-label);
+  position:absolute;top:calc(100% + 6px);
+  left:50%;transform:translateX(-50%);
+  font-size:11px;font-weight:600;
+  color:#4a6fa5;
+  white-space:nowrap;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:color .2s;
 }
-.neon-pct-label:hover { color: var(--sapphire); }
-.neon-pct-label.reached { color: var(--sapphire); font-weight: 700; }
+.neon-marker:hover::after{color:#7dd3fc}
+.neon-marker.active::after{color:#93c5fd;font-weight:700}
+.neon-marker[data-pos="25"]{left:25%}
+.neon-marker[data-pos="50"]{left:50%}
+.neon-marker[data-pos="75"]{left:75%}
+.neon-marker[data-pos="100"]{left:99%}
 
-/* fill colors per status */
-.fill-25  { width: 25%; background: linear-gradient(90deg, #f97316, #fb923c); box-shadow: 0 0 16px rgba(249,115,22,.6), 0 0 32px rgba(249,115,22,.3); }
-.fill-50  { width: 50%; background: linear-gradient(90deg, #eab308, #facc15); box-shadow: 0 0 16px rgba(234,179,8,.6),  0 0 32px rgba(234,179,8,.3); }
-.fill-75  { width: 75%; background: linear-gradient(90deg, var(--sapphire), var(--sky)); box-shadow: 0 0 16px rgba(30,64,175,.7), 0 0 32px rgba(30,64,175,.4); }
-.fill-100 { width: 100%; background: linear-gradient(90deg, #16a34a, #4ade80); box-shadow: 0 0 16px rgba(22,163,74,.6), 0 0 32px rgba(22,163,74,.3); }
+/* milestone info tooltip */
+.neon-markers-spacer{height:28px}
 
-/* ── ITEMS SECTION ── */
-.items-section { border-top: 1.5px solid var(--mist); }
-.items-label {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .05em; color: var(--muted);
-  padding: 14px 22px 8px;
-}
+/* ── ITEMS ── */
+.items-section{border-top:1.5px solid var(--mist)}
+.items-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:14px 22px 8px}
+.item-row{border-bottom:1px solid var(--mist)}
+.item-row:last-child{border-bottom:none}
+.item-header{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;cursor:pointer;user-select:none;transition:background .15s}
+.item-header:hover{background:var(--bg)}
+.item-left{display:flex;align-items:center;gap:9px}
+.item-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--ice)}
+.item-name{font-size:14px;font-weight:600}
+.item-chevron{font-size:11px;color:var(--muted);transition:transform .25s}
+.item-row.open .item-chevron{transform:rotate(180deg)}
+.item-detail{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s ease;background:var(--bg)}
+.item-row.open .item-detail{max-height:500px;padding:0 22px 14px}
+.spec-row{display:flex;gap:12px;align-items:flex-start;font-size:13px;padding:7px 0;border-bottom:1px solid var(--mist)}
+.spec-row:last-child{border-bottom:none}
+.spec-key{font-weight:600;color:var(--muted);min-width:110px;flex-shrink:0}
+.spec-val{color:var(--navy);line-height:1.5}
 
-.item-row { border-bottom: 1px solid var(--mist); }
-.item-row:last-child { border-bottom: none; }
+/* ── STATE / LOADING ── */
+.state-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 20px;text-align:center;gap:12px}
+.state-icon{font-size:40px}
+.state-title{font-size:18px;font-weight:700}
+.state-sub{font-size:14px;color:var(--muted);max-width:320px;line-height:1.6}
+.spinner{width:36px;height:36px;border:3px solid var(--mist);border-top-color:var(--sapphire);border-radius:50%;animation:spin .7s linear infinite}
 
-.item-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 22px; cursor: pointer; user-select: none;
-  transition: background .15s;
-}
-.item-header:hover { background: var(--bg); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wrenchBob{0%,100%{transform:translateX(-50%) rotate(-10deg)}50%{transform:translateX(-50%) rotate(10deg)}}
+@keyframes flickerOn{0%{opacity:.4}20%{opacity:1}40%{opacity:.7}60%{opacity:1}80%{opacity:.85}100%{opacity:1}}
 
-.item-left { display: flex; align-items: center; gap: 9px; }
-.item-icon {
-  width: 28px; height: 28px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; background: var(--ice);
-}
-.item-name { font-size: 14px; font-weight: 600; color: var(--navy); }
-.item-chevron { font-size: 11px; color: var(--muted); transition: transform .25s; }
-.item-row.open .item-chevron { transform: rotate(180deg); }
-
-.item-detail {
-  padding: 0 22px; max-height: 0; overflow: hidden;
-  transition: max-height .35s ease, padding .3s ease;
-  background: var(--bg);
-}
-.item-row.open .item-detail { max-height: 500px; padding: 0 22px 14px; }
-
-.spec-row {
-  display: flex; gap: 12px; align-items: flex-start;
-  font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--mist);
-}
-.spec-row:last-child { border-bottom: none; }
-.spec-key { font-weight: 600; color: var(--muted); min-width: 110px; flex-shrink: 0; }
-.spec-val { color: var(--navy); line-height: 1.5; }
-
-/* ── STATE BOXES ── */
-.state-box {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 64px 20px; text-align: center; gap: 12px;
-}
-.state-icon  { font-size: 40px; }
-.state-title { font-size: 18px; font-weight: 700; color: var(--navy); }
-.state-sub   { font-size: 14px; color: var(--muted); max-width: 320px; line-height: 1.6; }
-
-.spinner {
-  width: 36px; height: 36px; border: 3px solid var(--mist);
-  border-top-color: var(--sapphire); border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes wrenchBounce {
-  0%, 100% { transform: translate(-50%, -60%) rotate(0deg); }
-  25%       { transform: translate(-50%, -68%) rotate(-8deg); }
-  75%       { transform: translate(-50%, -68%) rotate(8deg); }
-}
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 4px; }
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--mist);border-radius:4px}
 </style>
 </head>
 <body>
@@ -519,7 +305,7 @@ body {
     <div class="login-sub">Masukkan password yang sudah diberikan untuk melihat status project kamu.</div>
     <label class="field-label" for="pwdInput">Password</label>
     <input class="field-input" id="pwdInput" type="password" placeholder="Masukkan password kamu" autocomplete="current-password">
-    <button class="btn-primary" onclick="doLogin()">Masuk</button>
+    <button class="btn-primary" id="btnLogin" onclick="doLogin()">Masuk</button>
     <div class="login-error" id="loginError">Password tidak ditemukan. Silakan cek kembali.</div>
     <div class="admin-link"><a onclick="showAdmin()">Admin Setup</a></div>
   </div>
@@ -532,9 +318,7 @@ body {
       <div class="admin-title">Admin Setup</div>
       <button class="btn-back" onclick="showLogin()">Kembali</button>
     </div>
-    <div id="adminFormWrap">
-      <div class="loading-cfg">Memuat konfigurasi...</div>
-    </div>
+    <div id="adminFormWrap"><div class="loading-cfg">Memuat konfigurasi...</div></div>
   </div>
 </div>
 
@@ -555,7 +339,7 @@ body {
     </div>
     <div class="dash-meta">
       <span class="dash-client-label" id="dashClientName"></span>
-      <button class="btn-refresh" onclick="refreshDashboard()" id="btnRefresh">↻ Refresh</button>
+      <button class="btn-refresh" id="btnRefresh" onclick="refreshDashboard()">↻ Refresh</button>
       <button class="btn-logout" onclick="doLogout()">Keluar</button>
     </div>
   </div>
@@ -573,349 +357,325 @@ body {
 const PROXY = 'https://script.google.com/macros/s/AKfycbwXLR_Hf7vABZ2EUPRWTndPcfXzL8LERe5Y_C6od_r7_5Ye4SZDz_HwGwtDaDzeaK51OQ/exec';
 
 /* ── SCREENS ── */
-function showLogin() {
-  s('loginScreen',''); s('adminPanel','hidden'); s('dashboard','hidden');
-}
-function showDashScreen() {
-  s('loginScreen','hidden'); s('adminPanel','hidden'); s('dashboard','');
-}
-function showAdminScreen() {
-  s('loginScreen','hidden'); s('adminPanel',''); s('dashboard','hidden');
-  loadAdminForm();
-}
-function s(id, cls) {
-  cls === 'hidden'
-    ? document.getElementById(id).classList.add('hidden')
-    : document.getElementById(id).classList.remove('hidden');
-}
+function showLogin(){s('loginScreen','');s('adminPanel','hidden');s('dashboard','hidden')}
+function showDashScreen(){s('loginScreen','hidden');s('adminPanel','hidden');s('dashboard','')}
+function showAdminScreen(){s('loginScreen','hidden');s('adminPanel','');s('dashboard','hidden');loadAdminForm()}
+function s(id,cls){cls==='hidden'?document.getElementById(id).classList.add('hidden'):document.getElementById(id).classList.remove('hidden')}
 
 /* ── LOGIN ── */
-async function doLogin() {
+async function doLogin(){
   const pwd = document.getElementById('pwdInput').value.trim();
-  if (!pwd) return;
-
-  const btn = document.querySelector('.btn-primary');
-  btn.textContent = 'Memeriksa...'; btn.disabled = true;
-
-  try {
+  if(!pwd) return;
+  const btn = document.getElementById('btnLogin');
+  btn.textContent='Memeriksa...';btn.disabled=true;
+  document.getElementById('loginError').classList.remove('show');
+  try{
     const cfg = await fetchConfig();
-    const client = (cfg.clients || []).find(c => String(c.password) === String(pwd));
-    if (!client) {
+    const client = (cfg.clients||[]).find(c=>String(c.password)===String(pwd));
+    if(!client){
       document.getElementById('loginError').classList.add('show');
-      btn.textContent = 'Masuk'; btn.disabled = false;
-      return;
+      btn.textContent='Masuk';btn.disabled=false;return;
     }
-    document.getElementById('loginError').classList.remove('show');
-    sessionStorage.setItem('activeClient', JSON.stringify(client));
+    sessionStorage.setItem('activeClient',JSON.stringify(client));
     loadDashboard(client);
-  } catch(e) {
+  }catch(e){
+    document.getElementById('loginError').textContent='Gagal terhubung ke server. Coba lagi.';
     document.getElementById('loginError').classList.add('show');
-    document.getElementById('loginError').textContent = 'Gagal terhubung ke server. Coba lagi.';
-    btn.textContent = 'Masuk'; btn.disabled = false;
+    btn.textContent='Masuk';btn.disabled=false;
   }
 }
-document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('pwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 
-function refreshDashboard() {
-  const saved = sessionStorage.getItem('activeClient');
-  if (!saved) return;
-  const btn = document.getElementById('btnRefresh');
-  btn.textContent = '↻';
-  btn.style.animation = 'spin .7s linear infinite';
-  btn.disabled = true;
-  try { loadDashboard(JSON.parse(saved)); } catch(e) {}
-  setTimeout(() => { btn.textContent = '↻ Refresh'; btn.style.animation = ''; btn.disabled = false; }, 2000);
-}
-
-function doLogout() {
+function doLogout(){
   sessionStorage.removeItem('activeClient');
-  document.getElementById('pwdInput').value = '';
+  document.getElementById('pwdInput').value='';
+  document.getElementById('btnLogin').textContent='Masuk';
+  document.getElementById('btnLogin').disabled=false;
   showLogin();
 }
 
-/* ── CONFIG (from Google Sheets via Apps Script) ── */
-async function fetchConfig() {
-  const res = await fetch(PROXY + '?action=getConfig');
-  const text = await res.text();
-  try { return JSON.parse(text); }
-  catch(e) { return { adminPwd:'', clients:[] }; }
+/* ── REFRESH ── */
+async function refreshDashboard(){
+  const saved = sessionStorage.getItem('activeClient');
+  if(!saved) return;
+  const btn = document.getElementById('btnRefresh');
+  btn.textContent='↻';btn.disabled=true;
+  // clear container to force re-render
+  document.getElementById('projectsContainer').innerHTML=
+    `<div class="state-box"><div class="spinner"></div><div class="state-sub">Memuat ulang data...</div></div>`;
+  document.getElementById('summaryBar').innerHTML='';
+  try{
+    const client = JSON.parse(saved);
+    const url = PROXY+(client.gid?`?gid=${encodeURIComponent(client.gid)}`:'');
+    const res = await fetch(url+'&t='+Date.now()); // cache bust
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const csv = await res.text();
+    if(!csv||csv.trim().length<5) throw new Error('Data kosong');
+    const projects = parseCsv(csv);
+    renderProjects(projects);
+  }catch(err){
+    document.getElementById('projectsContainer').innerHTML=`
+      <div class="state-box">
+        <div class="state-icon">⚠️</div>
+        <div class="state-title">Gagal memuat data</div>
+        <div class="state-sub">${err.message}</div>
+      </div>`;
+  }
+  btn.textContent='↻ Refresh';btn.disabled=false;
 }
 
-async function saveConfigRemote(cfg) {
-  const params = new URLSearchParams({ action: 'saveConfig', config: JSON.stringify(cfg) });
-  const res = await fetch(PROXY + '?' + params.toString());
+/* ── CONFIG ── */
+async function fetchConfig(){
+  const res = await fetch(PROXY+'?action=getConfig&t='+Date.now());
+  const text = await res.text();
+  try{return JSON.parse(text);}catch(e){return{adminPwd:'',clients:[]};}
+}
+
+async function saveConfigRemote(cfg){
+  const params = new URLSearchParams({action:'saveConfig',config:JSON.stringify(cfg)});
+  const res = await fetch(PROXY+'?'+params.toString());
   return await res.text();
 }
 
 /* ── ADMIN ── */
-let _cachedCfg = null;
-let _cid = 0;
+let _cachedCfg=null,_cid=0;
 
-function showAdmin() {
-  const adminPwd = prompt('Masukkan password admin:');
-  if (adminPwd === null) return;
-  sessionStorage.setItem('pendingAdminPwd', adminPwd);
+function showAdmin(){
+  const adminPwd=prompt('Masukkan password admin:');
+  if(adminPwd===null) return;
+  sessionStorage.setItem('pendingAdminPwd',adminPwd);
   showAdminScreen();
 }
 
-async function loadAdminForm() {
-  document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg">Memuat konfigurasi dari server...</div>';
-  try {
-    const cfg = await fetchConfig();
-    const pendingPwd = sessionStorage.getItem('pendingAdminPwd') || '';
-
-    if (cfg.adminPwd && cfg.adminPwd !== pendingPwd) {
-      document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg" style="color:#b91c1c">Password admin salah.</div>';
-      setTimeout(showLogin, 1500);
-      return;
+async function loadAdminForm(){
+  document.getElementById('adminFormWrap').innerHTML='<div class="loading-cfg">Memuat konfigurasi dari server...</div>';
+  try{
+    const cfg=await fetchConfig();
+    const pendingPwd=sessionStorage.getItem('pendingAdminPwd')||'';
+    if(cfg.adminPwd&&cfg.adminPwd!==pendingPwd){
+      document.getElementById('adminFormWrap').innerHTML='<div class="loading-cfg" style="color:#b91c1c">Password admin salah.</div>';
+      setTimeout(showLogin,1500);return;
     }
-    _cachedCfg = cfg;
-    renderAdminForm(cfg);
-  } catch(e) {
-    document.getElementById('adminFormWrap').innerHTML = '<div class="loading-cfg" style="color:#b91c1c">Gagal memuat konfigurasi.</div>';
+    _cachedCfg=cfg;renderAdminForm(cfg);
+  }catch(e){
+    document.getElementById('adminFormWrap').innerHTML='<div class="loading-cfg" style="color:#b91c1c">Gagal memuat konfigurasi.</div>';
   }
 }
 
-function renderAdminForm(cfg) {
-  _cid = 0;
-  document.getElementById('adminFormWrap').innerHTML = `
+function renderAdminForm(cfg){
+  _cid=0;
+  document.getElementById('adminFormWrap').innerHTML=`
     <div class="admin-section-title">Password Admin</div>
     <input class="admin-input" id="adminPwd" type="password" placeholder="Buat atau ubah password admin">
     <div class="admin-hint">Kosongkan jika tidak ingin mengubah password admin.</div>
-
-    <div class="admin-section-title">Apps Script URL</div>
-    <input class="admin-input" id="proxyUrl" type="text" value="${esc(PROXY)}">
-    <div class="admin-hint">URL sudah terisi otomatis.</div>
-
     <div class="admin-section-title">Daftar Client</div>
     <div id="clientList"></div>
     <button class="btn-add-client" onclick="addClientBlock()">+ Tambah Client</button>
-
-    <button class="btn-save" onclick="saveConfig()">Simpan Konfigurasi</button>
-    <div class="save-msg" id="saveMsg">Konfigurasi berhasil disimpan!</div>
-  `;
-  (cfg.clients || []).forEach(c => addClientBlock(c));
+    <button class="btn-save" id="btnSave" onclick="saveConfig()">Simpan Konfigurasi</button>
+    <div class="save-msg" id="saveMsg">Konfigurasi berhasil disimpan!</div>`;
+  (cfg.clients||[]).forEach(c=>addClientBlock(c));
 }
 
-function addClientBlock(data) {
-  data = data || {};
-  _cid++;
-  const id = _cid;
-  const d = document.createElement('div');
-  d.className = 'client-block';
-  d.dataset.cid = id;
-  d.innerHTML = `
+function addClientBlock(data){
+  data=data||{};_cid++;
+  const id=_cid;
+  const d=document.createElement('div');
+  d.className='client-block';d.dataset.cid=id;
+  d.innerHTML=`
     <div class="client-block-head">
       <span class="client-block-label">Client #${id}</span>
       <button class="client-remove" onclick="removeClient(${id})">Hapus</button>
     </div>
     <div class="client-grid">
-      <div>
-        <div class="field-mini-label">Nama Client</div>
-        <input class="admin-input" data-f="name" value="${esc(data.name||'')}" placeholder="Nama client">
-      </div>
-      <div>
-        <div class="field-mini-label">Password</div>
-        <input class="admin-input" data-f="password" value="${esc(data.password||'')}" placeholder="Password unik">
-      </div>
-      <div style="grid-column:1/-1">
-        <div class="field-mini-label">GID Tab Sheet</div>
+      <div><div class="field-mini-label">Nama Client</div>
+        <input class="admin-input" data-f="name" value="${esc(data.name||'')}" placeholder="Nama client"></div>
+      <div><div class="field-mini-label">Password</div>
+        <input class="admin-input" data-f="password" value="${esc(String(data.password||''))}" placeholder="Password unik"></div>
+      <div style="grid-column:1/-1"><div class="field-mini-label">GID Tab Sheet</div>
         <input class="admin-input" data-f="gid" value="${esc(String(data.gid||''))}" placeholder="Contoh: 0">
-        <div class="admin-hint">Angka setelah gid= di URL Google Sheet saat tab tersebut aktif.</div>
-      </div>
+        <div class="admin-hint">Angka setelah gid= di URL Google Sheet saat tab tersebut aktif.</div></div>
     </div>`;
   document.getElementById('clientList').appendChild(d);
 }
 
-function removeClient(id) {
-  const el = document.querySelector(`.client-block[data-cid="${id}"]`);
-  if (el) el.remove();
-}
+function removeClient(id){const el=document.querySelector(`.client-block[data-cid="${id}"]`);if(el)el.remove()}
 
-async function saveConfig() {
-  const btn = document.querySelector('.btn-save');
-  btn.textContent = 'Menyimpan...'; btn.disabled = true;
-
-  const cfg = { adminPwd: '', clients: [] };
-  const newPwd = document.getElementById('adminPwd').value.trim();
-  cfg.adminPwd = newPwd || (_cachedCfg ? _cachedCfg.adminPwd : '');
-
-  document.querySelectorAll('#clientList .client-block').forEach(b => {
+async function saveConfig(){
+  const btn=document.getElementById('btnSave');
+  btn.textContent='Menyimpan...';btn.disabled=true;
+  const cfg={adminPwd:'',clients:[]};
+  const newPwd=document.getElementById('adminPwd').value.trim();
+  cfg.adminPwd=newPwd||(_cachedCfg?_cachedCfg.adminPwd:'');
+  document.querySelectorAll('#clientList .client-block').forEach(b=>{
     cfg.clients.push({
-      name:     b.querySelector('[data-f="name"]').value.trim(),
-      password: b.querySelector('[data-f="password"]').value.trim(),
-      gid:      b.querySelector('[data-f="gid"]').value.trim(),
+      name:b.querySelector('[data-f="name"]').value.trim(),
+      password:b.querySelector('[data-f="password"]').value.trim(),
+      gid:b.querySelector('[data-f="gid"]').value.trim()
     });
   });
-
-  try {
-    await saveConfigRemote(cfg);
-    _cachedCfg = cfg;
-    const msg = document.getElementById('saveMsg');
-    msg.classList.add('show');
-    setTimeout(() => msg.classList.remove('show'), 3000);
-  } catch(e) {
-    alert('Gagal menyimpan. Coba lagi.');
-  }
-  btn.textContent = 'Simpan Konfigurasi'; btn.disabled = false;
+  try{
+    await saveConfigRemote(cfg);_cachedCfg=cfg;
+    const msg=document.getElementById('saveMsg');msg.classList.add('show');
+    setTimeout(()=>msg.classList.remove('show'),3000);
+  }catch(e){alert('Gagal menyimpan. Coba lagi.');}
+  btn.textContent='Simpan Konfigurasi';btn.disabled=false;
 }
 
-/* ── DASHBOARD ── */
-async function loadDashboard(client) {
+/* ── DASHBOARD LOAD ── */
+async function loadDashboard(client){
   showDashScreen();
-  document.getElementById('dashClientName').textContent = client.name;
-  document.getElementById('dashGreeting').textContent   = `Halo, ${client.name}!`;
-  document.getElementById('dashSub').textContent        = 'Berikut status project kamu saat ini.';
-  document.getElementById('summaryBar').innerHTML       = '';
-  document.getElementById('projectsContainer').innerHTML =
+  document.getElementById('dashClientName').textContent=client.name;
+  document.getElementById('dashGreeting').textContent=`Halo, ${client.name}!`;
+  document.getElementById('dashSub').textContent='Berikut status project kamu saat ini.';
+  document.getElementById('summaryBar').innerHTML='';
+  document.getElementById('projectsContainer').innerHTML=
     `<div class="state-box"><div class="spinner"></div><div class="state-sub">Memuat data project...</div></div>`;
 
-  const url = PROXY + (client.gid ? `?gid=${encodeURIComponent(client.gid)}` : '');
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const csv = await res.text();
-    if (!csv || csv.trim().length < 5) throw new Error('Data kosong');
-    const projects = parseCsv(csv);
-    renderProjects(projects);
-  } catch(err) {
-    document.getElementById('projectsContainer').innerHTML = `
+  const url=PROXY+(client.gid?`?gid=${encodeURIComponent(client.gid)}`:'');
+  try{
+    const res=await fetch(url+'&t='+Date.now());
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const csv=await res.text();
+    if(!csv||csv.trim().length<5) throw new Error('Data kosong');
+    renderProjects(parseCsv(csv));
+  }catch(err){
+    document.getElementById('projectsContainer').innerHTML=`
       <div class="state-box">
         <div class="state-icon">⚠️</div>
         <div class="state-title">Gagal memuat data</div>
         <div class="state-sub">Cek koneksi atau hubungi admin.<br>
-          <small style="color:#bbb;font-size:11px">${err.message}</small></div>
+          <small style="color:#999;font-size:11px">${err.message}</small></div>
       </div>`;
   }
 }
 
-/* ── CSV PARSER ── */
-function parseCsv(text) {
-  const rows = [];
-  for (const line of text.split('\n')) {
-    if (!line.trim()) continue;
-    const cols = []; let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
-      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-      else cur += c;
+/* ── CSV ── */
+function parseCsv(text){
+  const rows=[];
+  for(const line of text.split('\n')){
+    if(!line.trim()) continue;
+    const cols=[];let cur='',inQ=false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
+      else cur+=c;
     }
-    cols.push(cur.trim());
-    rows.push(cols);
+    cols.push(cur.trim());rows.push(cols);
   }
-  if (rows.length < 2) return [];
-  const hdr = rows[0].map(h => h.toLowerCase().trim());
-  const ci = kws => { const i = hdr.findIndex(h => kws.some(k => h.includes(k))); return i >= 0 ? i : -1; };
-  const iP = ci(['nama project','project']), iT = ci(['tipe','type','jenis']),
-        iS = ci(['spesifikasi','spec','detail']), iSt = ci(['status']),
-        iM = ci(['mulai','start']), iD = ci(['deadline','selesai']), iPIC = ci(['pic']);
-  const map = {};
-  for (let r = 1; r < rows.length; r++) {
-    const row = rows[r];
-    if (!row.some(c => c)) continue;
-    const name = iP >= 0 ? row[iP] : ''; if (!name) continue;
-    if (!map[name]) map[name] = {
-      name, status: iSt>=0?row[iSt]:'', tglMulai: iM>=0?row[iM]:'',
-      deadline: iD>=0?row[iD]:'', pic: iPIC>=0?row[iPIC]:'', items: []
-    };
-    map[name].items.push({ tipe: iT>=0?row[iT]:'', spek: iS>=0?row[iS]:'' });
+  if(rows.length<2) return[];
+  const hdr=rows[0].map(h=>h.toLowerCase().trim());
+  const ci=kws=>{const i=hdr.findIndex(h=>kws.some(k=>h.includes(k)));return i>=0?i:-1};
+  const iP=ci(['nama project','project']),iT=ci(['tipe','type','jenis']),
+        iS=ci(['spesifikasi','spec','detail']),iSt=ci(['status']),
+        iM=ci(['mulai','start']),iD=ci(['deadline','selesai']),iPIC=ci(['pic']);
+  const map={};
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r];if(!row.some(c=>c)) continue;
+    const name=iP>=0?row[iP]:'';if(!name) continue;
+    if(!map[name]) map[name]={name,status:iSt>=0?row[iSt]:'',tglMulai:iM>=0?row[iM]:'',deadline:iD>=0?row[iD]:'',pic:iPIC>=0?row[iPIC]:'',items:[]};
+    map[name].items.push({tipe:iT>=0?row[iT]:'',spek:iS>=0?row[iS]:''});
   }
   return Object.values(map);
 }
 
 /* ── RENDER ── */
-function renderProjects(projects) {
-  if (!projects.length) {
-    document.getElementById('projectsContainer').innerHTML = `
-      <div class="state-box">
-        <div class="state-icon">📭</div>
+function renderProjects(projects){
+  if(!projects.length){
+    document.getElementById('projectsContainer').innerHTML=`
+      <div class="state-box"><div class="state-icon">📭</div>
         <div class="state-title">Belum ada project</div>
-        <div class="state-sub">Data akan tampil setelah diisi di Google Sheet.</div>
-      </div>`; return;
+        <div class="state-sub">Data akan tampil setelah diisi di Google Sheet.</div></div>`;return;
   }
-  const cnt = {'25':0,'50':0,'75':0,'100':0};
-  projects.forEach(p => { const k = pct(p.status); if (cnt[k]!==undefined) cnt[k]++; });
-  let chips = '';
-  if (cnt['25'])  chips += mkChip('25',  cnt['25']);
-  if (cnt['50'])  chips += mkChip('50',  cnt['50']);
-  if (cnt['75'])  chips += mkChip('75',  cnt['75']);
-  if (cnt['100']) chips += mkChip('100', cnt['100']);
-  document.getElementById('summaryBar').innerHTML = chips;
-  const grid = document.createElement('div');
-  grid.className = 'projects-grid';
-  projects.forEach(p => grid.appendChild(buildCard(p)));
-  document.getElementById('projectsContainer').innerHTML = '';
+  const cnt={'25':0,'50':0,'75':0,'100':0};
+  projects.forEach(p=>{const k=pct(p.status);if(cnt[k]!==undefined)cnt[k]++;});
+  let chips='';
+  if(cnt['25'])  chips+=mkChip('25',cnt['25']);
+  if(cnt['50'])  chips+=mkChip('50',cnt['50']);
+  if(cnt['75'])  chips+=mkChip('75',cnt['75']);
+  if(cnt['100']) chips+=mkChip('100',cnt['100']);
+  document.getElementById('summaryBar').innerHTML=chips;
+  const grid=document.createElement('div');
+  grid.className='projects-grid';
+  projects.forEach(p=>grid.appendChild(buildCard(p)));
+  document.getElementById('projectsContainer').innerHTML='';
   document.getElementById('projectsContainer').appendChild(grid);
 
-  // animate progress bars after DOM insert
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.neon-bar-fill[data-pct]').forEach(fill => {
-      setTimeout(() => {
-        const p = fill.dataset.pct;
-        fill.className = `neon-bar-fill fill-${p}`;
-        // update wrench position
-        const wrench = fill.parentElement.querySelector('.neon-wrench');
-        if (wrench) {
-          const pctMap = {'25':'25%','50':'50%','75':'75%','100':'98%'};
-          wrench.style.left = pctMap[p] || '5%';
-          wrench.style.animation = 'wrenchBounce 1s ease infinite';
-        }
-        // activate milestone dots
-        fill.parentElement.querySelectorAll('.neon-dot').forEach(dot => {
-          if (parseInt(dot.dataset.pos) <= parseInt(p)) dot.classList.add('active');
+  // animate neon fills after DOM insert
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.neon-fill[data-pct]').forEach(fill=>{
+      setTimeout(()=>{
+        const p=fill.dataset.pct;
+        fill.classList.add('pct-'+p);
+        const pctW={'25':'25%','50':'50%','75':'75%','100':'100%'};
+        fill.style.width=pctW[p]||'0%';
+        fill.style.animation='flickerOn .6s ease both';
+        // lit class on tube
+        const tube=fill.closest('.neon-tube');
+        if(tube){tube.classList.add('lit-'+p);}
+        // wrench position
+        const wrench=fill.closest('.neon-tube-wrap').querySelector('.neon-wrench-icon');
+        if(wrench) wrench.style.left=pctW[p]||'5%';
+        // active markers
+        fill.closest('.neon-section').querySelectorAll('.neon-marker').forEach(m=>{
+          if(parseInt(m.dataset.pos)<=parseInt(p)) m.classList.add('active');
         });
-      }, 100);
+      },120);
     });
   });
 }
 
-function mkChip(p, n) {
-  return `<div class="summary-chip chip-${p}"><div class="chip-dot"></div>${n} project &bull; ${p}%</div>`;
+function mkChip(p,n){return`<div class="summary-chip chip-${p}"><div class="chip-dot"></div>${n} project &bull; ${p}%</div>`}
+
+function pct(status){
+  if(!status) return'other';
+  const s=String(status).replace('%','').trim();
+  if(['25','50','75','100'].includes(s)) return s;
+  const m=s.match(/\d+/);
+  if(m){const n=parseInt(m[0]);if(n<=25)return'25';if(n<=50)return'50';if(n<=75)return'75';return'100';}
+  return'other';
 }
 
-function pct(status) {
-  if (!status) return 'other';
-  const s = String(status).replace('%','').trim();
-  if (['25','50','75','100'].includes(s)) return s;
-  const m = s.match(/\d+/);
-  if (m) { const n = parseInt(m[0]); if(n<=25)return'25'; if(n<=50)return'50'; if(n<=75)return'75'; return'100'; }
-  return 'other';
-}
+const MILESTONE={
+  '25':{label:'Perencanaan',desc:'Desain disetujui, bahan dipesan, jadwal produksi sudah ditentukan.'},
+  '50':{label:'Produksi',desc:'Proses produksi berjalan: pemotongan, perakitan, dan pemasangan komponen.'},
+  '75':{label:'Finishing',desc:'Produksi selesai. Pengecatan, pemasangan kabel, dan quality check.'},
+  '100':{label:'Selesai',desc:'Project selesai dan siap untuk pengiriman atau pemasangan.'}
+};
 
-function buildCard(p) {
-  const pp  = pct(p.status);
-  const lbl = pp==='other' ? (p.status||'-') : pp+'%';
-  const ini = (p.pic||'-').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+function buildCard(p){
+  const pp=pct(p.status);
+  const lbl=pp==='other'?(p.status||'-'):pp+'%';
+  const ini=(p.pic||'-').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 
-  let itemsHtml = '';
-  if (p.items && p.items.length) {
-    const rows = p.items.map((item,i) => {
-      const specs = parseSpek(item.spek);
-      return `
-        <div class="item-row">
-          <div class="item-header" onclick="toggleItem(this.parentElement)">
-            <div class="item-left">
-              <div class="item-icon">${itemEmoji(item.tipe)}</div>
-              <div class="item-name">${esc(item.tipe||'Item')}</div>
-            </div>
-            <div class="item-chevron">▾</div>
+  let itemsHtml='';
+  if(p.items&&p.items.length){
+    const rows=p.items.map(item=>{
+      const specs=parseSpek(item.spek);
+      return`<div class="item-row">
+        <div class="item-header" onclick="toggleItem(this.parentElement)">
+          <div class="item-left">
+            <div class="item-icon">${itemEmoji(item.tipe)}</div>
+            <div class="item-name">${esc(item.tipe||'Item')}</div>
           </div>
-          <div class="item-detail">
-            ${specs.map(spec=>`
-              <div class="spec-row">
-                <span class="spec-key">${esc(spec.key)}</span>
-                <span class="spec-val">${esc(spec.val)}</span>
-              </div>`).join('')}
-          </div>
-        </div>`;
+          <div class="item-chevron">▾</div>
+        </div>
+        <div class="item-detail">
+          ${specs.map(sp=>`<div class="spec-row"><span class="spec-key">${esc(sp.key)}</span><span class="spec-val">${esc(sp.val)}</span></div>`).join('')}
+        </div>
+      </div>`;
     }).join('');
-    itemsHtml = `<div class="items-section"><div class="items-label">Tipe Barang &amp; Spesifikasi</div>${rows}</div>`;
+    itemsHtml=`<div class="items-section"><div class="items-label">Tipe Barang &amp; Spesifikasi</div>${rows}</div>`;
   }
 
-  const card = document.createElement('div');
-  card.className = 'project-card';
-  card.innerHTML = `
+  // milestone labels HTML
+  const markers=['25','50','75','100'].map(m=>`
+    <div class="neon-marker" data-pos="${m}" onclick="showMilestone('${esc(p.name)}','${m}')">
+    </div>`).join('');
+
+  const card=document.createElement('div');
+  card.className='project-card';
+  card.innerHTML=`
     <div class="card-accent"></div>
     <div class="card-body">
       <div class="card-top">
@@ -932,80 +692,51 @@ function buildCard(p) {
       </div>
     </div>
 
-    <div class="neon-progress-wrap">
-      <div class="neon-progress-label">Progress Pengerjaan</div>
-      <div class="neon-bar-outer">
-        <div class="neon-bar-fill" data-pct="${pp}" style="width:0%"></div>
-        <div class="neon-milestones">
-          <div class="neon-dot" data-pos="25"></div>
-          <div class="neon-dot" data-pos="50"></div>
-          <div class="neon-dot" data-pos="75"></div>
-          <div class="neon-dot" data-pos="100"></div>
+    <div class="neon-section">
+      <div class="neon-section-label">Progress Pengerjaan</div>
+      <div class="neon-tube-wrap">
+        <div class="neon-wrench-icon" style="left:2%">🔧</div>
+        <div class="neon-tube">
+          <div class="neon-fill" data-pct="${pp}" style="width:0%"></div>
+          <div class="neon-glare"></div>
+          <div class="neon-markers">${markers}</div>
         </div>
-        <svg class="neon-wrench" style="left:2%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- wrench body -->
-          <path d="M20 4C16.5 4 13.5 6.5 13 10L6 18C5 19 5 21 6 22L10 26C11 27 13 27 14 26L22 19C25.5 18.5 28 15.5 28 12C28 7.6 24.4 4 20 4Z" fill="#FFF3B0" stroke="#1E40AF" stroke-width="1.5"/>
-          <!-- wrench hole -->
-          <circle cx="20" cy="11" r="2.5" fill="#1E40AF"/>
-          <!-- handle -->
-          <rect x="4" y="20" width="10" height="4" rx="2" transform="rotate(-45 4 20)" fill="#DBEAFE" stroke="#1E40AF" stroke-width="1"/>
-          <!-- sparkle -->
-          <circle cx="26" cy="6" r="1.5" fill="#FFE082" opacity=".8"/>
-          <circle cx="24" cy="4" r="1"   fill="#FFE082" opacity=".5"/>
-        </svg>
       </div>
-      <div class="neon-pct-labels">
-        <div class="neon-pct-label ${parseInt(pp)>=25?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','25')">25%<br><span style="font-size:10px;font-weight:400">Perencanaan</span></div>
-        <div class="neon-pct-label ${parseInt(pp)>=50?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','50')">50%<br><span style="font-size:10px;font-weight:400">Produksi</span></div>
-        <div class="neon-pct-label ${parseInt(pp)>=75?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','75')">75%<br><span style="font-size:10px;font-weight:400">Finishing</span></div>
-        <div class="neon-pct-label ${parseInt(pp)>=100?'reached':''}" onclick="showMilestoneInfo('${esc(p.name)}','100')">100%<br><span style="font-size:10px;font-weight:400">Selesai</span></div>
-      </div>
+      <div class="neon-markers-spacer"></div>
     </div>
-    ${itemsHtml}
-  `;
+    ${itemsHtml}`;
   return card;
 }
 
-/* milestone info popup */
-const MILESTONE_INFO = {
-  '25':  { label: 'Perencanaan', desc: 'Desain sudah disetujui, bahan sudah dipesan, jadwal produksi sudah ditentukan.' },
-  '50':  { label: 'Produksi',    desc: 'Proses produksi sedang berjalan. Pemotongan, perakitan, dan pemasangan komponen.' },
-  '75':  { label: 'Finishing',   desc: 'Produksi selesai. Proses pengecatan, pemasangan kabel, dan quality check.' },
-  '100': { label: 'Selesai',     desc: 'Project sudah selesai dan siap untuk pengiriman atau pemasangan.' },
-};
-
-function showMilestoneInfo(projectName, pctKey) {
-  const info = MILESTONE_INFO[pctKey];
-  if (!info) return;
-  alert(`${projectName}\n\n${pctKey}% - ${info.label}\n${info.desc}`);
+function showMilestone(name,p){
+  const info=MILESTONE[p];if(!info) return;
+  alert(`${name}\n\n${p}% — ${info.label}\n\n${info.desc}`);
 }
 
-function itemEmoji(t) {
-  const s = (t||'').toLowerCase();
-  if (s.includes('neon'))  return '💡';
-  if (s.includes('huruf')) return '🔤';
-  return '📦';
+function itemEmoji(t){
+  const s=(t||'').toLowerCase();
+  if(s.includes('neon')) return'💡';
+  if(s.includes('huruf')) return'🔤';
+  return'📦';
 }
 
-function parseSpek(spek) {
-  if (!spek) return [{key:'Detail',val:'-'}];
-  const sp = spek.split(';').map(s=>s.trim()).filter(Boolean);
-  if (sp.some(s=>s.includes(':'))) return sp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()};});
-  const cp = spek.split(',').map(s=>s.trim()).filter(Boolean);
-  if (cp.some(s=>s.includes(':'))) return cp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()};});
-  return [{key:'Detail',val:spek}];
+function parseSpek(spek){
+  if(!spek) return[{key:'Detail',val:'-'}];
+  const sp=spek.split(';').map(s=>s.trim()).filter(Boolean);
+  if(sp.some(s=>s.includes(':'))) return sp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()}});
+  const cp=spek.split(',').map(s=>s.trim()).filter(Boolean);
+  if(cp.some(s=>s.includes(':'))) return cp.map(s=>{const i=s.indexOf(':');return{key:s.slice(0,i).trim(),val:s.slice(i+1).trim()}});
+  return[{key:'Detail',val:spek}];
 }
 
-function toggleItem(row) { row.classList.toggle('open'); }
+function toggleItem(row){row.classList.toggle('open')}
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 /* ── INIT ── */
-(function init() {
-  const saved = sessionStorage.getItem('activeClient');
-  if (saved) { try { loadDashboard(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('activeClient'); } }
+(function init(){
+  const saved=sessionStorage.getItem('activeClient');
+  if(saved){try{loadDashboard(JSON.parse(saved));return;}catch(e){sessionStorage.removeItem('activeClient');}}
   showLogin();
 })();
 </script>
