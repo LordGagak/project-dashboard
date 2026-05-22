@@ -218,32 +218,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--navy);min
   animation:wrenchBob 2s ease-in-out infinite;
 }
 
-/* milestone markers */
+/* milestone tick lines inside tube */
 .neon-markers{position:absolute;inset:0;pointer-events:none;z-index:3}
-.neon-marker{
-  position:absolute;top:0;height:100%;
-  width:2px;background:rgba(255,255,255,.08);
-}
-.neon-marker::after{
-  content:attr(data-label);
-  position:absolute;top:calc(100% + 6px);
-  left:50%;transform:translateX(-50%);
-  font-size:11px;font-weight:600;
-  color:#4a6fa5;
-  white-space:nowrap;
-  font-family:'DM Sans',sans-serif;
-  cursor:pointer;
-  transition:color .2s;
-}
-.neon-marker:hover::after{color:#7dd3fc}
-.neon-marker.active::after{color:#93c5fd;font-weight:700}
-.neon-marker[data-pos="25"]{left:25%}
-.neon-marker[data-pos="50"]{left:50%}
-.neon-marker[data-pos="75"]{left:75%}
-.neon-marker[data-pos="100"]{left:99%}
+.neon-marker-tick{position:absolute;top:0;height:100%;width:2px;background:rgba(255,255,255,.1);}
+.neon-marker-tick[data-pos="25"]{left:25%}
+.neon-marker-tick[data-pos="50"]{left:50%}
+.neon-marker-tick[data-pos="75"]{left:75%}
+.neon-marker-tick[data-pos="100"]{left:99%}
 
-/* milestone info tooltip */
-.neon-markers-spacer{height:28px}
+/* milestone labels row below tube - clickable */
+.neon-labels-row{display:flex;justify-content:space-between;padding:10px 0 0;pointer-events:all}
+.neon-label-btn{
+  width:25%;text-align:center;
+  font-size:11px;font-weight:600;color:#4a6fa5;
+  cursor:pointer;user-select:none;
+  padding:4px 2px;border-radius:6px;
+  transition:color .2s,background .2s;
+  font-family:'DM Sans',sans-serif;
+  line-height:1.4;
+  background:none;border:none;
+}
+.neon-label-btn:hover{color:#7dd3fc;background:rgba(125,211,252,.08)}
+.neon-label-btn.active{color:#93c5fd;font-weight:700}
+.neon-label-btn span{display:block;font-size:9px;font-weight:400;color:#4a6fa5;margin-top:1px}
+.neon-label-btn.active span{color:#7dd3fc}
 
 /* ── ITEMS ── */
 .items-section{border-top:1.5px solid var(--mist)}
@@ -407,7 +405,7 @@ async function refreshDashboard(){
   try{
     const client = JSON.parse(saved);
     const url = PROXY+(client.gid?`?gid=${encodeURIComponent(client.gid)}`:'');
-    const res = await fetch(url+'&t='+Date.now()); // cache bust
+    const res = await fetch(url+'&t='+Date.now(), {cache:'no-store'});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const csv = await res.text();
     if(!csv||csv.trim().length<5) throw new Error('Data kosong');
@@ -533,7 +531,7 @@ async function loadDashboard(client){
 
   const url=PROXY+(client.gid?`?gid=${encodeURIComponent(client.gid)}`:'');
   try{
-    const res=await fetch(url+'&t='+Date.now());
+    const res=await fetch(url+'&t='+Date.now(),{cache:'no-store'});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const csv=await res.text();
     if(!csv||csv.trim().length<5) throw new Error('Data kosong');
@@ -668,10 +666,18 @@ function buildCard(p){
     itemsHtml=`<div class="items-section"><div class="items-label">Tipe Barang &amp; Spesifikasi</div>${rows}</div>`;
   }
 
-  // milestone labels HTML
+  // milestone tick lines inside tube
   const markers=['25','50','75','100'].map(m=>`
-    <div class="neon-marker" data-pos="${m}" onclick="showMilestone('${esc(p.name)}','${m}')">
-    </div>`).join('');
+    <div class="neon-marker-tick" data-pos="${m}"></div>`).join('');
+
+  // milestone label buttons below tube
+  const MLABELS={'25':'Perencanaan','50':'Produksi','75':'Finishing','100':'Selesai'};
+  const pctNum=parseInt(pp)||0;
+  const labelBtns=['25','50','75','100'].map(m=>`
+    <button class="neon-label-btn ${pctNum>=parseInt(m)?'active':''}"
+      onclick="showMilestone('${esc(p.name)}','${m}')">
+      ${m}%<span>${MLABELS[m]}</span>
+    </button>`).join('');
 
   const card=document.createElement('div');
   card.className='project-card';
@@ -702,7 +708,7 @@ function buildCard(p){
           <div class="neon-markers">${markers}</div>
         </div>
       </div>
-      <div class="neon-markers-spacer"></div>
+      <div class="neon-labels-row">${labelBtns}</div>
     </div>
     ${itemsHtml}`;
   return card;
